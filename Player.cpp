@@ -28,8 +28,10 @@ void Player::handle_input()
 	float cosY		= glm::cos(glm::radians(_rotation.y));
 	float sinY		= glm::sin(glm::radians(_rotation.y));
 	float sinX		= glm::sin(glm::radians(_rotation.x));
+	float cosX		= glm::cos(glm::radians(_rotation.x));
 	float cosY_90	= glm::cos(glm::radians(_rotation.y + 90.0f));
 	float sinY_90	= glm::sin(glm::radians(_rotation.y + 90.0f));
+
 
 	//keyboard
 	auto* key = &App::keyboard;
@@ -56,10 +58,12 @@ void Player::handle_input()
 		_acceleration.x += cosY* _speed;
 		_acceleration.z += sinY* _speed;
 	}
+
 	//mouse
 	static float const BOUND = 89.f;
 	static auto lastMousePosition = sf::Mouse::getPosition(App::window);
 	sf::Vector2i change = sf::Mouse::getPosition(App::window) - lastMousePosition;
+	
 	_rotation.y += change.x * 0.05f;
 	_rotation.x += change.y * 0.05f;
 
@@ -73,8 +77,9 @@ void Player::handle_input()
 	else if (_rotation.y < 0)
 		_rotation.y = 360;
 
-	_direction.z = -sinY_90;
-	_direction.x = -cosY_90;
+	//FIXME: normalize direction...
+	_direction.z = -sinY_90 * cosX;
+	_direction.x = -cosY_90 * cosX;
 	_direction.y = -sinX;
 
 	auto cx = static_cast<int>(App::window.getSize().x / 2);

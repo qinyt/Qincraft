@@ -10,7 +10,7 @@ _tex("./Textures/test.png")
 	int i;
 	Mesh mesh;
 	auto id_mat = glm::mat4(1.0f);
-	auto proj_mat = glm::perspective(glm::radians(90.0f), 1.5f, 0.1f, 2000.0f);
+	auto proj_mat = glm::perspective(glm::radians(60.0f), 1.5f, 0.1f, 2000.0f);
 	_shader.set_model_view_mat(id_mat);
 	_shader.set_project_mat(proj_mat);
 	
