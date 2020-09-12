@@ -10,8 +10,7 @@ public:
 	virtual void update() = 0;
 	virtual void render() = 0;
 	inline glm::vec3* get_position() { return &_position; }
-	inline glm::vec3* get_rotation() { return &_rotation; }
 
 public:
-	glm::vec3 _position, _rotation;
+	glm::vec3 _position;
 };

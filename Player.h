@@ -11,9 +11,11 @@ public:
 	~Player();
 	void render() override;
 	void update() override;
-	inline glm::vec3* get_direction() { return &_direction; }
+	inline glm::vec3* get_forward_dir() { return &_dir_forward; }
+	inline glm::vec3* get_up_dir() { return &_dir_up; }
 private:
 	void handle_input();
-	float _speed;	
-	glm::vec3 _direction, _acceleration;
+	void handle_mouse();
+	float _speed, _pitch, _head;	
+	glm::vec3 _dir_forward, _dir_right, _dir_up, _acceleration;
 };
