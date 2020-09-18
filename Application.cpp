@@ -25,9 +25,12 @@ void App::init()
     }
     //init GL
     glViewport(0, 0, window.getSize().x, window.getSize().y);
+    glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
+
     //init game AFTER context been initialized !!!
     _game = new Game();
 }

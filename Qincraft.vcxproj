@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>sfml-audio.lib;sfml-network.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;openal32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-audio-d.lib;sfml-network-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;openal32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -151,12 +151,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Block.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="ChunkRenderer.cpp" />
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="glad\glad.c" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Math.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -164,25 +168,38 @@
     <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="SimpleRenderer.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
+    <ClCompile Include="SkyRenderer.cpp" />
+    <ClCompile Include="SkyTexture.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ChunkRenderer.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Block.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Chunk.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="glad\glad.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="NonCopyable.h" />
+    <ClInclude Include="NonMovable.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="print_util.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="SimpleRenderer.h" />
     <ClInclude Include="SimpleShader.h" />
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="SkyRenderer.h" />
+    <ClInclude Include="SkyTexture.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

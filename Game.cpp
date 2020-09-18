@@ -23,4 +23,6 @@ void Game::render()
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	_simple_renderer.render(&_camera);
+	_chunk_renderer.render(&_camera);
+	_sky_renderer.render(&_camera);
 }
