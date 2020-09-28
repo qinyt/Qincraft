@@ -5,15 +5,16 @@
 #include"Camera.h"
 #include"SimpleShader.h"
 #include"Chunk.h"
-
+#include<vector>
 class ChunkRenderer 
 {
 public:
 	ChunkRenderer();
 	~ChunkRenderer() = default;
+	void add_chunk(Chunk* chunk);
 	void render(Camera* camera);
 private:
 	Texture _tex;
 	SimpleShader  _shader;
-	Model _model;
+	std::vector<Model> _models;
 };

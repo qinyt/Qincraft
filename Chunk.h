@@ -2,13 +2,14 @@
 
 #include"Model.h"
 #include"Block.h"
+#include"Math.h"
 
 #define CHUNK_WIDTH_SIZE	10
 #define CHUNK_LAYER_SIZE	CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE
 #define CHUNK_VOLUME		CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE
 
-class Chunk;
 
+class Chunk;
 class ChunkManager 
 {
 public:
@@ -35,14 +36,19 @@ class Chunk
 {
 public:
 	Chunk();
+	Chunk(GLint posX, GLint posZ);
 	~Chunk();
 	BlockType get_block_type_within_chunk(GLint x, GLint y, GLint z) const;
 	Mesh_t* get_mesh();
+	inline math::VectorXZ_t get_pos() { return _world_pos; }
+	inline GLint get_posX() { return _world_pos.x; }
+	inline GLint get_posZ() { return _world_pos.z; }
+
 private:
+	math::VectorXZ_t _world_pos;
 	Mesh_t _mesh;
 	Block _blocks[CHUNK_VOLUME];
 	static ChunkManager _chunk_manager;
-	GLint _posX, _posZ;
 };
 
 typedef struct Adjacency 

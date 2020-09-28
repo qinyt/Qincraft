@@ -1,5 +1,6 @@
 #include"Chunk.h"
 #include"Math.h"
+#include"World.h"
 #include<memory>
 
 #define ADD_INDICE GLuint index[6]; \
@@ -23,15 +24,18 @@ void ChunkManager::build_mesh(Chunk* chunk)
 	_current_chunk = chunk;
 	_current_indice = 0;
 
+	GLint world_posX = _current_chunk->get_posX();
+	GLint world_posZ = _current_chunk->get_posZ();
+
 	_mesh = _current_chunk->get_mesh();
-	_coord = Block::block_manager.get_tex_coord(_current_chunk->get_block_type(_posX, _posY, _posZ));
+	_coord = Block::block_manager.get_tex_coord(_current_chunk->get_block_type_within_chunk(_posX, _posY, _posZ));
 	_tex_step = Block::block_manager.get_tex_coord_step();
 
 	for (_posY = 0; _posY < CHUNK_WIDTH_SIZE; ++_posY) 
 	{
-		for (_posZ = 0; _posZ < CHUNK_WIDTH_SIZE; ++_posZ) 
+		for (_posZ = world_posZ * CHUNK_WIDTH_SIZE; _posZ < world_posZ * CHUNK_WIDTH_SIZE + CHUNK_WIDTH_SIZE; ++_posZ)
 		{
-			for (_posX = 0; _posX < CHUNK_WIDTH_SIZE; ++_posX)
+			for (_posX = world_posX * CHUNK_WIDTH_SIZE; _posX < world_posX * CHUNK_WIDTH_SIZE + CHUNK_WIDTH_SIZE; ++_posX)
 			{
 				try_build_front_face();
 				try_build_back_face();
@@ -171,16 +175,25 @@ bool ChunkManager::is_face_buildable(GLint* dir)
 {
 	GLint pos[3] = { _posX, _posY, _posZ };
 	math::vec3i_add(pos, dir, pos);
-	auto type = _current_chunk->get_block_type_within_chunk(pos[0], pos[1], pos[2]);
+	auto type = World::get_block_type(pos[0], pos[1], pos[2]);
 	if (type != BlockType::AIR) return false;
 	return true;
 }
 
 //----------------------------------------------------------------------------------------
 
-Chunk::Chunk():_posX(0), _posZ(0)
+Chunk::Chunk() :_world_pos{0,0}
 {
 	for (int i = 0; i < CHUNK_VOLUME; ++i) 
+	{
+		_blocks[i] = BlockType::DIRT;
+	}
+	_chunk_manager.build_mesh(this);
+}
+
+Chunk::Chunk(GLint posX, GLint posZ) :_world_pos{ posX, posZ }
+{
+	for (int i = 0; i < CHUNK_VOLUME; ++i)
 	{
 		_blocks[i] = BlockType::DIRT;
 	}

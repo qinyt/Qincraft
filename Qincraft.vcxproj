@@ -171,6 +171,7 @@
     <ClCompile Include="SkyRenderer.cpp" />
     <ClCompile Include="SkyTexture.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChunkRenderer.h" />

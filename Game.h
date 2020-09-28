@@ -4,6 +4,8 @@
 #include "Camera.h"
 #include"ChunkRenderer.h"
 #include"SkyRenderer.h"
+#include"World.h"
+
 
 class Game 
 {
@@ -13,9 +15,9 @@ public:
 	void update();
 	void render();
 private:
-	SimpleRenderer  _simple_renderer;
-	ChunkRenderer   _chunk_renderer;
-	SkyRenderer		_sky_renderer;
+	World	_world;
 	Player _player;
 	Camera _camera;
+	//SkyRenderer		_sky_renderer;
+	ChunkRenderer   _chunk_renderer;
 };

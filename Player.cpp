@@ -6,10 +6,10 @@
 
 Player::Player():
 	_speed(0.001f),
-	_head(0.0f),
-	_pitch(0.0f)
+	_head(90.0f),
+	_pitch(45.0f)
 {
-	_position = glm::vec3(0.0f, 0.0f, 0.0f);
+	_position = glm::vec3(0.0f, 16.0f, 0.0f);
 	_dir_forward = glm::vec3(0.0f, 0.0f, -1.0f);
 	_acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
 }
@@ -44,6 +44,10 @@ void Player::handle_mouse()
 		_head = 180.0f;
 	else if (_head < -180.0f)
 		_head = 180.0f;
+
+	//degree to radius degree ?
+	//_head = glm::radians(_head);
+	//_pitch = glm::radians(_pitch);
 
 	//Rotation head (y)
 	rotHead[0][0] = cos(_head);			rotHead[0][1] = 0;			rotHead[0][2] = sin(_head);
