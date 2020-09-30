@@ -7,12 +7,12 @@ World::World()
 {
 	Chunk chunk(0, 0);
 	push_chunk(chunk);
-	/*Chunk chunk1(-1, 0);
+	Chunk chunk1(-1, 0);
 	push_chunk(chunk1);
 	Chunk chunk2(0, 1);
 	push_chunk(chunk2);
 	Chunk chunk3(-1, 1);
-	push_chunk(chunk3);*/
+	push_chunk(chunk3);
 }
 
 World::~World() {}
@@ -34,7 +34,7 @@ BlockType World::get_block_type(GLint x, GLint y, GLint z)
 	auto world_posX = x / CHUNK_WIDTH_SIZE;
 	auto world_posZ = z / CHUNK_WIDTH_SIZE;
 	math::VectorXZ_t key = { world_posX, world_posZ };
-
+	//printf("coord: %d, %d, %d\n", x, y, z);
 	if (map.find(key) == map.end())
 		return BlockType::AIR;
 	Chunk& chunk = map.at(key);

@@ -4,7 +4,7 @@
 #include"Block.h"
 #include"Math.h"
 
-#define CHUNK_WIDTH_SIZE	10
+#define CHUNK_WIDTH_SIZE	5
 #define CHUNK_LAYER_SIZE	CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE
 #define CHUNK_VOLUME		CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE
 
@@ -13,7 +13,7 @@ class Chunk;
 class ChunkManager 
 {
 public:
-	ChunkManager() = default;
+	ChunkManager();
 	~ChunkManager() = default;
 	void build_mesh(Chunk* chunk);
 private:
@@ -48,7 +48,7 @@ private:
 	math::VectorXZ_t _world_pos;
 	Mesh_t _mesh;
 	Block _blocks[CHUNK_VOLUME];
-	static ChunkManager _chunk_manager;
+//	static ChunkManager _chunk_manager;
 };
 
 typedef struct Adjacency 

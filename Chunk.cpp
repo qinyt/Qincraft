@@ -15,9 +15,15 @@ _current_indice += 4
 
 #define likely(x)  __builtin_expect(!!(x), 1)
 
-ChunkManager Chunk::_chunk_manager;
+//ChunkManager Chunk::chunk_manager;
+static ChunkManager chunk_manager;
 
 static Adjacency_t adj;
+
+ChunkManager::ChunkManager() 
+{
+	_tex_step = Block::block_manager.get_tex_coord_step();
+}
 
 void ChunkManager::build_mesh(Chunk* chunk)
 {
@@ -28,8 +34,9 @@ void ChunkManager::build_mesh(Chunk* chunk)
 	GLint world_posZ = _current_chunk->get_posZ();
 
 	_mesh = _current_chunk->get_mesh();
-	_coord = Block::block_manager.get_tex_coord(_current_chunk->get_block_type_within_chunk(_posX, _posY, _posZ));
-	_tex_step = Block::block_manager.get_tex_coord_step();
+	//_coord = Block::block_manager.get_tex_coord(World::get_block_type(_posX, _posY, _posZ));
+
+	_coord = Block::block_manager.get_tex_coord(BlockType::DIRT);
 
 	for (_posY = 0; _posY < CHUNK_WIDTH_SIZE; ++_posY) 
 	{
@@ -40,7 +47,7 @@ void ChunkManager::build_mesh(Chunk* chunk)
 				try_build_front_face();
 				try_build_back_face();
 				try_build_up_face();
-				try_build_down_face();
+//				try_build_down_face();
 				try_build_left_face();
 				try_build_right_face();
 			}
@@ -175,8 +182,13 @@ bool ChunkManager::is_face_buildable(GLint* dir)
 {
 	GLint pos[3] = { _posX, _posY, _posZ };
 	math::vec3i_add(pos, dir, pos);
-	auto type = World::get_block_type(pos[0], pos[1], pos[2]);
-	if (type != BlockType::AIR) return false;
+	//auto type = World::get_block_type(pos[0], pos[1], pos[2]);
+	auto type = _current_chunk->get_block_type_within_chunk(pos[0], pos[1], pos[2]);
+	
+	if (type != BlockType::AIR) 
+	{
+		return false;
+	} 
 	return true;
 }
 
@@ -188,7 +200,7 @@ Chunk::Chunk() :_world_pos{0,0}
 	{
 		_blocks[i] = BlockType::DIRT;
 	}
-	_chunk_manager.build_mesh(this);
+	chunk_manager.build_mesh(this);
 }
 
 Chunk::Chunk(GLint posX, GLint posZ) :_world_pos{ posX, posZ }
@@ -197,12 +209,13 @@ Chunk::Chunk(GLint posX, GLint posZ) :_world_pos{ posX, posZ }
 	{
 		_blocks[i] = BlockType::DIRT;
 	}
-	_chunk_manager.build_mesh(this);
+	chunk_manager.build_mesh(this);
 }
 
 Chunk::~Chunk() 
 {
-
+	_mesh.indices.clear();
+	_mesh.vertices.clear();
 }
 
 Mesh_t* Chunk::get_mesh() 
@@ -214,9 +227,15 @@ Mesh_t* Chunk::get_mesh()
 //TODO::update to world scenario where you cross chunks
 BlockType Chunk::get_block_type_within_chunk(GLint x, GLint y, GLint z) const
 {
+	x = x - _world_pos.x * CHUNK_WIDTH_SIZE;
+	z = z - _world_pos.z * CHUNK_WIDTH_SIZE;
+
 	if (x < 0 || x >= CHUNK_WIDTH_SIZE) return BlockType::AIR;
 	if (y < 0 || y >= CHUNK_WIDTH_SIZE) return BlockType::AIR;
 	if (z < 0 || z >= CHUNK_WIDTH_SIZE) return BlockType::AIR;
+	
+	x = x % CHUNK_WIDTH_SIZE;
+	z = z % CHUNK_WIDTH_SIZE;
 	
 	GLuint idx = x + z * CHUNK_WIDTH_SIZE + y * CHUNK_LAYER_SIZE;
 

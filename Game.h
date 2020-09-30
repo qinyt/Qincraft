@@ -19,5 +19,6 @@ private:
 	Player _player;
 	Camera _camera;
 	//SkyRenderer		_sky_renderer;
+	SimpleRenderer	_simpleRenderer;
 	ChunkRenderer   _chunk_renderer;
 };

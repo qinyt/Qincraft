@@ -10,11 +10,11 @@ class ChunkRenderer
 {
 public:
 	ChunkRenderer();
-	~ChunkRenderer() = default;
+	~ChunkRenderer();
 	void add_chunk(Chunk* chunk);
 	void render(Camera* camera);
 private:
 	Texture _tex;
 	SimpleShader  _shader;
-	std::vector<Model> _models;
+	std::vector<Model*> _models;
 };

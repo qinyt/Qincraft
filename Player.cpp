@@ -3,13 +3,14 @@
 #include<cmath>
 #include"print_util.h"
 
+#define DEGREE_TO_RADIAN  3.1415926f/180.0f
 
 Player::Player():
 	_speed(0.001f),
-	_head(90.0f),
-	_pitch(45.0f)
+	_head(135.0f * DEGREE_TO_RADIAN),
+	_pitch(0.0f)
 {
-	_position = glm::vec3(0.0f, 16.0f, 0.0f);
+	_position = glm::vec3(0.0f, 5.0f, 0.0f);
 	_dir_forward = glm::vec3(0.0f, 0.0f, -1.0f);
 	_acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
 }
@@ -35,19 +36,16 @@ void Player::handle_mouse()
 	_head  += change.x * 0.01f;
 	_pitch += change.y * 0.01f;
 
-	if (_pitch > BOUND)
-		_pitch = BOUND;
-	else if (_pitch < -BOUND)
-		_pitch = -BOUND;
+	if (_pitch > BOUND * DEGREE_TO_RADIAN)
+		_pitch = BOUND * DEGREE_TO_RADIAN;
+	else if (_pitch < -BOUND * DEGREE_TO_RADIAN)
+		_pitch = -BOUND * DEGREE_TO_RADIAN;
 
-	if (_head > 180.0f)
-		_head = 180.0f;
-	else if (_head < -180.0f)
-		_head = 180.0f;
+	if (_head > 180.0f * DEGREE_TO_RADIAN)
+		_head = -180.0f * DEGREE_TO_RADIAN;
+	else if (_head < -180.0f * DEGREE_TO_RADIAN)
+		_head = 180.0f * DEGREE_TO_RADIAN;
 
-	//degree to radius degree ?
-	//_head = glm::radians(_head);
-	//_pitch = glm::radians(_pitch);
 
 	//Rotation head (y)
 	rotHead[0][0] = cos(_head);			rotHead[0][1] = 0;			rotHead[0][2] = sin(_head);
