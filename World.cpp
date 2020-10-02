@@ -5,14 +5,19 @@ std::unordered_map<math::VectorXZ_t, Chunk> World::map;
 
 World::World() 
 {
-	Chunk chunk(0, 0);
+	Chunk chunk(500, 500);
 	push_chunk(chunk);
-	Chunk chunk1(-1, 0);
+	Chunk chunk1(500+1, 500);
 	push_chunk(chunk1);
-	Chunk chunk2(0, 1);
+	Chunk chunk2(500+1, 500+1);
 	push_chunk(chunk2);
-	Chunk chunk3(-1, 1);
+	Chunk chunk3(500, 500+1);	
 	push_chunk(chunk3);
+
+	for (auto& item: map) 
+	{
+		item.second.mesh();
+	}
 }
 
 World::~World() {}
@@ -38,9 +43,7 @@ BlockType World::get_block_type(GLint x, GLint y, GLint z)
 	if (map.find(key) == map.end())
 		return BlockType::AIR;
 	Chunk& chunk = map.at(key);
-	GLint posX = x % CHUNK_WIDTH_SIZE;
-	GLint posZ = z % CHUNK_WIDTH_SIZE;
 
-	return chunk.get_block_type_within_chunk(posX, y, posZ);
+	return chunk.get_block_type_within_chunk(x, y, z);
 }
 

@@ -4,7 +4,7 @@
 #include"Block.h"
 #include"Math.h"
 
-#define CHUNK_WIDTH_SIZE	5
+#define CHUNK_WIDTH_SIZE	9
 #define CHUNK_LAYER_SIZE	CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE
 #define CHUNK_VOLUME		CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE
 
@@ -43,11 +43,13 @@ public:
 	inline math::VectorXZ_t get_pos() { return _world_pos; }
 	inline GLint get_posX() { return _world_pos.x; }
 	inline GLint get_posZ() { return _world_pos.z; }
-
+	void mesh();
+	inline bool is_meshed() { return _is_meshed; }
 private:
 	math::VectorXZ_t _world_pos;
 	Mesh_t _mesh;
 	Block _blocks[CHUNK_VOLUME];
+	bool _is_meshed;
 //	static ChunkManager _chunk_manager;
 };
 

@@ -8,9 +8,9 @@
 Player::Player():
 	_speed(0.001f),
 	_head(135.0f * DEGREE_TO_RADIAN),
-	_pitch(0.0f)
+	_pitch(80.0f)
 {
-	_position = glm::vec3(0.0f, 5.0f, 0.0f);
+	_position = glm::vec3(501.0f * CHUNK_WIDTH_SIZE, CHUNK_WIDTH_SIZE +1.0f, 501.0f * CHUNK_WIDTH_SIZE);
 	_dir_forward = glm::vec3(0.0f, 0.0f, -1.0f);
 	_acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
 }

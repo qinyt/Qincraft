@@ -182,9 +182,11 @@ bool ChunkManager::is_face_buildable(GLint* dir)
 {
 	GLint pos[3] = { _posX, _posY, _posZ };
 	math::vec3i_add(pos, dir, pos);
-	//auto type = World::get_block_type(pos[0], pos[1], pos[2]);
+#if 0
+	auto type = World::get_block_type(pos[0], pos[1], pos[2]);
+#else
 	auto type = _current_chunk->get_block_type_within_chunk(pos[0], pos[1], pos[2]);
-	
+#endif	
 	if (type != BlockType::AIR) 
 	{
 		return false;
@@ -194,21 +196,26 @@ bool ChunkManager::is_face_buildable(GLint* dir)
 
 //----------------------------------------------------------------------------------------
 
-Chunk::Chunk() :_world_pos{0,0}
+Chunk::Chunk() :_world_pos{0,0}, _is_meshed(false)
 {
 	for (int i = 0; i < CHUNK_VOLUME; ++i) 
 	{
 		_blocks[i] = BlockType::DIRT;
 	}
-	chunk_manager.build_mesh(this);
+	//chunk_manager.build_mesh(this);
 }
 
-Chunk::Chunk(GLint posX, GLint posZ) :_world_pos{ posX, posZ }
+Chunk::Chunk(GLint posX, GLint posZ) :_world_pos{ posX, posZ }, _is_meshed(false)
 {
 	for (int i = 0; i < CHUNK_VOLUME; ++i)
 	{
 		_blocks[i] = BlockType::DIRT;
 	}
+	//chunk_manager.build_mesh(this);
+}
+
+void Chunk::mesh() 
+{
 	chunk_manager.build_mesh(this);
 }
 
@@ -223,21 +230,18 @@ Mesh_t* Chunk::get_mesh()
 	return &_mesh;
 }
 
-
 //TODO::update to world scenario where you cross chunks
 BlockType Chunk::get_block_type_within_chunk(GLint x, GLint y, GLint z) const
 {
-	x = x - _world_pos.x * CHUNK_WIDTH_SIZE;
-	z = z - _world_pos.z * CHUNK_WIDTH_SIZE;
-
-	if (x < 0 || x >= CHUNK_WIDTH_SIZE) return BlockType::AIR;
 	if (y < 0 || y >= CHUNK_WIDTH_SIZE) return BlockType::AIR;
-	if (z < 0 || z >= CHUNK_WIDTH_SIZE) return BlockType::AIR;
 	
-	x = x % CHUNK_WIDTH_SIZE;
-	z = z % CHUNK_WIDTH_SIZE;
+	GLint lx = x - _world_pos.x * CHUNK_WIDTH_SIZE;
+	GLint lz = z - _world_pos.z * CHUNK_WIDTH_SIZE;
+
+	if (lx < 0 || lx >= CHUNK_WIDTH_SIZE) return World::get_block_type(x, y, z);
+	if (lz < 0 || lz >= CHUNK_WIDTH_SIZE) return World::get_block_type(x, y, z);
 	
-	GLuint idx = x + z * CHUNK_WIDTH_SIZE + y * CHUNK_LAYER_SIZE;
+	GLuint idx = lx + lz * CHUNK_WIDTH_SIZE + y * CHUNK_LAYER_SIZE;
 
 	return _blocks[idx].get_type();
 }
