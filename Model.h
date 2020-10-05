@@ -18,11 +18,10 @@ typedef struct Mesh
 	void add_index(GLuint index)	{ indices.emplace_back(index); }
 }Mesh_t;
 
-//TODO: integrite render info
 typedef struct RenderInfo 
 {
-	GLuint _vao;
-	GLuint _indices_count;
+	GLuint vao;
+	GLuint indices_count;
 }RenderInfo_t;
 
 #define VERTEX_SLOT		0
@@ -36,14 +35,14 @@ public:
 	void add_data(Mesh_t* mesh);
 	void bind();
 	void clear_data();
-	inline GLuint get_indices_count() { return _indices_count; }
+	inline GLuint get_indices_count() { return _render_info.indices_count; }
+	inline RenderInfo_t* get_render_info() { return &_render_info; }
 
 private:
 	void gen_vao();
 	void gen_vbo(Mesh_t* mesh);
 	void gen_ebo(Mesh_t* mesh);
 
-	GLuint _vao;
+	RenderInfo_t _render_info;
 	GLuint _vbo;
-	GLuint _indices_count;
 };

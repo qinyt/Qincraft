@@ -23,7 +23,7 @@ ChunkRenderer::~ChunkRenderer()
 
 void ChunkRenderer::add_chunk(Chunk* chunk)
 {
-	_models.emplace_back(chunk->get_model());
+	_models.emplace_back(chunk->get_model()->get_render_info());
 }
 
 
@@ -45,8 +45,9 @@ void ChunkRenderer::render(Camera* camera)
 		
 	for (auto model : _models) 
 	{
-		model->bind();
-		glDrawElements(GL_TRIANGLES, model->get_indices_count(), GL_UNSIGNED_INT, nullptr);
+		glBindVertexArray(model->vao);
+		glDrawElements(GL_TRIANGLES, model->indices_count, GL_UNSIGNED_INT, nullptr);
+		glDeleteVertexArrays(1, &model->vao);
 	}
 	_models.clear();
 }

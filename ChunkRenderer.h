@@ -16,5 +16,5 @@ public:
 private:
 	Texture _tex;
 	SimpleShader  _shader;
-	std::vector<Model*> _models;
+	std::vector<RenderInfo_t*> _models;
 };
