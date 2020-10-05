@@ -14,9 +14,9 @@ public:
 	~Game();
 	void update();
 	void render();
+	static Player	player;
 private:
 	World	_world;
-	Player _player;
 	Camera _camera;
 	//SkyRenderer		_sky_renderer;
 	SimpleRenderer	_simpleRenderer;

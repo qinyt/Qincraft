@@ -1,9 +1,11 @@
 #include"Game.h"
 #include"glad\glad.h"
 
+Player Game::player;
+
 Game::Game() 
 {
-	_camera.hook_entity(&_player);
+	_camera.hook_entity(&player);
 }
 
 Game::~Game()	
@@ -13,7 +15,7 @@ Game::~Game()
 
 void Game::update() 
 {
-	_player.update();
+	player.update();
 	_camera.update();
 }
 

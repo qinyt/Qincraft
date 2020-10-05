@@ -2,6 +2,7 @@
 #include"Player.h"
 #include<cmath>
 #include"print_util.h"
+#include"World.h"
 
 #define DEGREE_TO_RADIAN  3.1415926f/180.0f
 
@@ -10,7 +11,7 @@ Player::Player():
 	_head(135.0f * DEGREE_TO_RADIAN),
 	_pitch(80.0f)
 {
-	_position = glm::vec3(501.0f * CHUNK_WIDTH_SIZE, CHUNK_WIDTH_SIZE +1.0f, 501.0f * CHUNK_WIDTH_SIZE);
+	_position = glm::vec3(PLAYER_SPAWN_X(0), PLAYER_SPAWN_Y(1), PLAYER_SPAWN_Z(0));
 	_dir_forward = glm::vec3(0.0f, 0.0f, -1.0f);
 	_acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
 }

@@ -43,13 +43,17 @@ public:
 	inline math::VectorXZ_t get_pos() { return _world_pos; }
 	inline GLint get_posX() { return _world_pos.x; }
 	inline GLint get_posZ() { return _world_pos.z; }
-	void mesh();
+
 	inline bool is_meshed() { return _is_meshed; }
+	void mesh();
+	void add_data_to_GPU();
+	Model* get_model();
 private:
 	math::VectorXZ_t _world_pos;
 	Mesh_t _mesh;
 	Block _blocks[CHUNK_VOLUME];
 	bool _is_meshed;
+	Model _model;
 //	static ChunkManager _chunk_manager;
 };
 

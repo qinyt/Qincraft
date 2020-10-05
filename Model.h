@@ -18,6 +18,13 @@ typedef struct Mesh
 	void add_index(GLuint index)	{ indices.emplace_back(index); }
 }Mesh_t;
 
+//TODO: integrite render info
+typedef struct RenderInfo 
+{
+	GLuint _vao;
+	GLuint _indices_count;
+}RenderInfo_t;
+
 #define VERTEX_SLOT		0
 #define TEX_COORD_SLOT	1
 

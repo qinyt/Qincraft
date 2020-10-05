@@ -196,13 +196,14 @@ bool ChunkManager::is_face_buildable(GLint* dir)
 
 //----------------------------------------------------------------------------------------
 
-Chunk::Chunk() :_world_pos{0,0}, _is_meshed(false)
+Chunk::Chunk() :
+	_world_pos{0,0}, 
+	_is_meshed(false)
 {
 	for (int i = 0; i < CHUNK_VOLUME; ++i) 
 	{
 		_blocks[i] = BlockType::DIRT;
 	}
-	//chunk_manager.build_mesh(this);
 }
 
 Chunk::Chunk(GLint posX, GLint posZ) :_world_pos{ posX, posZ }, _is_meshed(false)
@@ -211,12 +212,12 @@ Chunk::Chunk(GLint posX, GLint posZ) :_world_pos{ posX, posZ }, _is_meshed(false
 	{
 		_blocks[i] = BlockType::DIRT;
 	}
-	//chunk_manager.build_mesh(this);
 }
 
 void Chunk::mesh() 
 {
 	chunk_manager.build_mesh(this);
+	_is_meshed = true;
 }
 
 Chunk::~Chunk() 
@@ -246,4 +247,12 @@ BlockType Chunk::get_block_type_within_chunk(GLint x, GLint y, GLint z) const
 	return _blocks[idx].get_type();
 }
 
+void Chunk::add_data_to_GPU() 
+{
+	_model.add_data(&_mesh);
+}
 
+Model* Chunk::get_model() 
+{
+	return &_model;
+}
