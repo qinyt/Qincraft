@@ -22,6 +22,7 @@ typedef struct RenderInfo
 {
 	GLuint vao;
 	GLuint indices_count;
+	void reset() { vao = 0; indices_count = 0; }
 }RenderInfo_t;
 
 #define VERTEX_SLOT		0

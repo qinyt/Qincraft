@@ -55,11 +55,18 @@ void App::poll_event()
         if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Escape)  window.close();
     }
 }
-
+static GLuint frames = 0;
 void App::loop() 
 {    
     while (1) 
     {
+        if (_timer.time_passed_milli() > 1000.0) 
+        {
+            _timer.reset();
+            printf("fps: %d", frames);
+            frames = 0;
+        }
+        ++frames;
         poll_event();
         
         if (App::keyboard.is_key_down(sf::Keyboard::Key::Space)) 

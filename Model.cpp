@@ -17,8 +17,8 @@ void Model::add_data(Mesh_t* mesh)
     gen_vao();
     gen_vbo(mesh);
     gen_ebo(mesh);
-    mesh->vertices.clear();
-    mesh->indices.clear();
+//    mesh->vertices.clear();
+//    mesh->indices.clear();
 }
 
 void Model::gen_ebo(Mesh_t* mesh) 
@@ -62,5 +62,6 @@ void Model::clear_data()
         glDeleteVertexArrays(1, &_render_info.vao);
     if (_vbo)
         glDeleteBuffers(1, &_vbo);
-    _render_info.indices_count= 0;
+    _render_info.reset();
+    _vbo = 0;
 }

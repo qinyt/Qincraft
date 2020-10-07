@@ -6,7 +6,6 @@
 #include"SkyRenderer.h"
 #include"World.h"
 
-
 class Game 
 {
 public: 

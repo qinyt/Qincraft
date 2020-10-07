@@ -6,22 +6,34 @@
 
 std::unordered_map<math::VectorXZ_t, Chunk> World::map;
 
+
+#if 1
+#define LOCK _chunk_mtx.lock();
+
+#define UNLOCK _chunk_mtx.unlock();
+#else
+#define LOCK 
+#define UNLOCK 
+#endif
+
 World::World() :
 	_chunk_building_thd([&]()
 {
+	GLint posX, posZ;
 	while (1) 
 	{
-		GLint posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
-		GLint posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
-		for(GLint i = -RENDER_DISTANCE; i < RENDER_DISTANCE; ++i)
-			for (GLint j = -RENDER_DISTANCE; j < RENDER_DISTANCE; ++j)
+		posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
+		posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
+		LOCK;
+		for(GLint i = -RENDER_DISTANCE; i < RENDER_DISTANCE+1; ++i)
+			for (GLint j = -RENDER_DISTANCE; j < RENDER_DISTANCE+1; ++j)
 			{
 				GLint x = posX + j;
 				GLint z = posZ + i;
 				if (!is_chunk_exist(x, z)) 
 				{
 					Chunk chunk(x, z);
-					push_chunk(chunk);					
+					push_chunk(chunk);
 				}
 			}
 		// must add chunk first, THEN mesh. Otherwise, the meshing process is wrong.
@@ -31,13 +43,15 @@ World::World() :
 				GLint x = posX + j;
 				GLint z = posZ + i;
 				math::VectorXZ_t key = { x, z };
+				if (map.find(key) == map.end()) continue;
 				auto& chunk = map.at(key);
 				if (chunk.is_meshed() == false) 
 				{
 					chunk.mesh();
 				}
 			}
-		printf("building chunks \n");
+		//printf("map size: %d", map.size());
+		UNLOCK;
 		sleep_millisecons(50);
 	}
 })
@@ -71,8 +85,8 @@ BlockType World::get_block_type(GLint x, GLint y, GLint z)
 {
 	auto world_posX = x / CHUNK_WIDTH_SIZE;
 	auto world_posZ = z / CHUNK_WIDTH_SIZE;
+	
 	math::VectorXZ_t key = { world_posX, world_posZ };
-	//printf("coord: %d, %d, %d\n", x, y, z);
 	if (map.find(key) == map.end())
 		return BlockType::AIR;
 	Chunk& chunk = map.at(key);
@@ -80,3 +94,37 @@ BlockType World::get_block_type(GLint x, GLint y, GLint z)
 	return chunk.get_block_type_within_chunk(x, y, z);
 }
 
+void World::set_chunk_renderer(ChunkRenderer* renderer) 
+{
+	_chunk_renderer = renderer;
+}
+
+
+void World::update() 
+{
+
+}
+
+void World::render() 
+{
+	GLint posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
+	GLint posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
+	LOCK;
+	for (auto iter = map.begin(); iter != map.end();)
+	{
+		auto& pos = iter->first;
+		GLint dx = posX - pos.x;
+		GLint dz = posZ - pos.z;
+		if ((dx * dx + dz * dz) > 2*RENDER_DISTANCE* RENDER_DISTANCE)
+		{
+			iter = map.erase(iter);
+			continue;
+		}
+		auto& chunk = iter->second;
+		chunk.add_data_to_GPU();
+		_chunk_renderer->add_chunk(&chunk);
+		++iter;
+	}
+	//map.clear();
+	UNLOCK;
+}

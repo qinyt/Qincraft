@@ -28,8 +28,8 @@ ChunkManager::ChunkManager()
 void ChunkManager::build_mesh(Chunk* chunk)
 {
 	_current_chunk = chunk;
+	_current_chunk->clear_mesh();
 	_current_indice = 0;
-
 	GLint world_posX = _current_chunk->get_posX();
 	GLint world_posZ = _current_chunk->get_posZ();
 
@@ -197,8 +197,9 @@ bool ChunkManager::is_face_buildable(GLint* dir)
 //----------------------------------------------------------------------------------------
 
 Chunk::Chunk() :
-	_world_pos{0,0}, 
-	_is_meshed(false)
+	_world_pos{ 0,0 },
+	_is_meshed(false),
+	_is_dirty(false)
 {
 	for (int i = 0; i < CHUNK_VOLUME; ++i) 
 	{
@@ -206,7 +207,10 @@ Chunk::Chunk() :
 	}
 }
 
-Chunk::Chunk(GLint posX, GLint posZ) :_world_pos{ posX, posZ }, _is_meshed(false)
+Chunk::Chunk(GLint posX, GLint posZ) :
+	_world_pos{ posX, posZ }, 
+	_is_meshed(false),
+	_is_dirty(false)
 {
 	for (int i = 0; i < CHUNK_VOLUME; ++i)
 	{
@@ -221,6 +225,11 @@ void Chunk::mesh()
 }
 
 Chunk::~Chunk() 
+{
+	clear_mesh();
+}
+
+void Chunk::clear_mesh() 
 {
 	_mesh.indices.clear();
 	_mesh.vertices.clear();

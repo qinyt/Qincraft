@@ -28,14 +28,7 @@ void ChunkRenderer::add_chunk(Chunk* chunk)
 
 
 void ChunkRenderer::render(Camera* camera) 
-{
-	auto* map = World::get_map();
-	for (auto& item : *map)
-	{
-		auto& chunk = item.second;
-		chunk.add_data_to_GPU();
-		add_chunk(&chunk);
-	}
+{	
 	if (_models.empty()) return;
 
 	_shader.bind();
@@ -47,7 +40,7 @@ void ChunkRenderer::render(Camera* camera)
 	{
 		glBindVertexArray(model->vao);
 		glDrawElements(GL_TRIANGLES, model->indices_count, GL_UNSIGNED_INT, nullptr);
-		glDeleteVertexArrays(1, &model->vao);
 	}
 	_models.clear();
+	//World::get_map()->clear();
 }
