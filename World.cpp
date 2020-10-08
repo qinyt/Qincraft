@@ -7,7 +7,7 @@
 std::unordered_map<math::VectorXZ_t, Chunk> World::map;
 
 
-#if 1
+#if 0
 #define LOCK _chunk_mtx.lock();
 
 #define UNLOCK _chunk_mtx.unlock();
@@ -36,21 +36,8 @@ World::World() :
 					push_chunk(chunk);
 				}
 			}
-		// must add chunk first, THEN mesh. Otherwise, the meshing process is wrong.
-		for (GLint i = -RENDER_DISTANCE; i < RENDER_DISTANCE; ++i)
-			for (GLint j = -RENDER_DISTANCE; j < RENDER_DISTANCE; ++j)
-			{
-				GLint x = posX + j;
-				GLint z = posZ + i;
-				math::VectorXZ_t key = { x, z };
-				if (map.find(key) == map.end()) continue;
-				auto& chunk = map.at(key);
-				if (chunk.is_meshed() == false) 
-				{
-					chunk.mesh();
-				}
-			}
-		//printf("map size: %d", map.size());
+		
+		//printf("map size: %d\n", map.size());
 		UNLOCK;
 		sleep_millisecons(50);
 	}
@@ -110,6 +97,22 @@ void World::render()
 	GLint posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
 	GLint posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
 	LOCK;
+
+	// must add chunk first, THEN mesh. Otherwise, the meshing process is wrong.
+	for (GLint i = -RENDER_DISTANCE; i < RENDER_DISTANCE; ++i)
+		for (GLint j = -RENDER_DISTANCE; j < RENDER_DISTANCE; ++j)
+		{
+			GLint x = posX + j;
+			GLint z = posZ + i;
+			math::VectorXZ_t key = { x, z };
+			if (map.find(key) == map.end()) continue;
+			auto& chunk = map.at(key);
+			if (chunk.is_meshed() == false)
+			{
+				chunk.mesh();
+			}
+		}
+
 	for (auto iter = map.begin(); iter != map.end();)
 	{
 		auto& pos = iter->first;
@@ -125,6 +128,7 @@ void World::render()
 		_chunk_renderer->add_chunk(&chunk);
 		++iter;
 	}
+
 	//map.clear();
 	UNLOCK;
 }

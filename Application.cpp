@@ -63,7 +63,7 @@ void App::loop()
         if (_timer.time_passed_milli() > 1000.0) 
         {
             _timer.reset();
-            printf("fps: %d", frames);
+            printf("fps: %d\n", frames);
             frames = 0;
         }
         ++frames;

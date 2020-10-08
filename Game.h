@@ -17,7 +17,7 @@ public:
 private:
 	World	_world;
 	Camera _camera;
-	//SkyRenderer		_sky_renderer;
+	SkyRenderer		_sky_renderer;
 	SimpleRenderer	_simpleRenderer;
 	ChunkRenderer   _chunk_renderer;
 };

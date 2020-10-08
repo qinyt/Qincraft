@@ -12,7 +12,6 @@ Camera::Camera():
 Camera::~Camera() {}
 
 
-
 void Camera::update() 
 {
 	auto p_pos = _p_entity->get_position();
@@ -21,5 +20,9 @@ void Camera::update()
 	auto up = ((Player*)_p_entity)->get_up_dir();
 
 	_model_view_mat = std::move(glm::lookAt(*p_pos, *dir, *up));
+	_sky_view_mat = _model_view_mat;
+	_sky_view_mat[3][0] = 0.0f;
+	_sky_view_mat[3][1] = 0.0f;
+	_sky_view_mat[3][2] = 0.0f;
 }
 

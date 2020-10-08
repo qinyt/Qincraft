@@ -28,5 +28,5 @@ void Game::render()
 	_world.render();
 	//_simpleRenderer.render(&_camera);
 	_chunk_renderer.render(&_camera);
-	//_sky_renderer.render(&_camera);
+	_sky_renderer.render(&_camera);
 }

@@ -1,8 +1,8 @@
 #pragma once
 #include"SkyTexture.h"
-#include"SimpleShader.h"
 #include"Model.h"
 #include"Camera.h"
+#include"SkyShader.h"
 
 class SkyRenderer
 {
@@ -12,6 +12,6 @@ public:
 	void render(Camera* camera);
 private:
 	SkyTexture _tex;
-	SimpleShader  _shader;
+	SkyShader _shader;
 	Model _model;
 };

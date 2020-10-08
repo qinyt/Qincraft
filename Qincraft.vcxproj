@@ -169,6 +169,7 @@
     <ClCompile Include="SimpleRenderer.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
     <ClCompile Include="SkyRenderer.cpp" />
+    <ClCompile Include="SkyShader.cpp" />
     <ClCompile Include="SkyTexture.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="SimpleShader.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SkyRenderer.h" />
+    <ClInclude Include="SkyShader.h" />
     <ClInclude Include="SkyTexture.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />

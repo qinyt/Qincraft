@@ -8,9 +8,8 @@
 ChunkRenderer::ChunkRenderer():
 	_tex("./Textures/DefaultPack2.png")
 {
-	auto proj_mat = glm::perspective(glm::radians(60.0f), 1.5f, 0.1f, 100.0f);
+	auto proj_mat = glm::perspective(glm::radians(60.0f), 1.5f, 0.1f, 1000.0f);
 	_shader.set_project_mat(proj_mat);
-
 }
 
 ChunkRenderer::~ChunkRenderer() 
