@@ -6,7 +6,6 @@
 
 std::unordered_map<math::VectorXZ_t, Chunk> World::map;
 
-
 #if 0
 #define LOCK _chunk_mtx.lock();
 
@@ -32,6 +31,7 @@ World::World() :
 				GLint z = posZ + i;
 				if (!is_chunk_exist(x, z)) 
 				{
+					//TODO: async the process
 					Chunk chunk(x, z);
 					push_chunk(chunk);
 				}

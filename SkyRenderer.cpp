@@ -5,12 +5,12 @@
 SkyRenderer::SkyRenderer() 
 {
 	std::vector<const char*> path;
-	path.emplace_back("./Textures/left.png");
 	path.emplace_back("./Textures/right.png");
+	path.emplace_back("./Textures/left.png");
 	path.emplace_back("./Textures/top.png");
 	path.emplace_back("./Textures/bottom.png");
-	path.emplace_back("./Textures/front.png");
 	path.emplace_back("./Textures/back.png");
+	path.emplace_back("./Textures/front.png");
 	_tex.init(path);
 	
 	int i;
@@ -120,7 +120,6 @@ SkyRenderer::SkyRenderer()
 	for (i = 0; i < 24; ++i)
 	{
 		memcpy(verts.position, pos[i], 3 * sizeof(GLfloat));
-		//memcpy(verts.tex_coord, cord[i], 2 * sizeof(GLfloat));
 		mesh.add_vert(verts);
 	}
 	for (i = 0; i < 36; ++i)
