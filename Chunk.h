@@ -3,34 +3,11 @@
 #include"Model.h"
 #include"Block.h"
 #include"Math.h"
+#include"ChunkManager.h"
 
-#define CHUNK_WIDTH_SIZE	9
+#define CHUNK_WIDTH_SIZE	16
 #define CHUNK_LAYER_SIZE	CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE
 #define CHUNK_VOLUME		CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE
-
-
-class Chunk;
-class ChunkManager 
-{
-public:
-	ChunkManager();
-	~ChunkManager() = default;
-	void build_mesh(Chunk* chunk);
-private:
-	bool is_face_buildable(GLint* dir);
-	void try_build_front_face();
-	void try_build_back_face();
-	void try_build_up_face();
-	void try_build_down_face();
-	void try_build_left_face();
-	void try_build_right_face();
-	GLint	_posX, _posY, _posZ;
-	Chunk*	_current_chunk;
-	GLuint	_current_indice;
-	Mesh_t* _mesh;
-	TexCoord_t*		_coord;
-	TexCoordStep_t* _tex_step; 
-};
 
 class Chunk 
 {
@@ -45,7 +22,10 @@ public:
 	inline GLint get_posZ() { return _world_pos.z; }
 	inline bool is_dirty() const { return _is_dirty; } 
 	inline bool is_meshed() const { return _is_meshed; }
+	inline Block* get_block_ptr()  { return _blocks; }
+	inline GLuint* get_height_map() { return _height_map; }
 	void mesh();
+	void build_block();
 	void clear_mesh();
 	void add_data_to_GPU();
 	Model* get_model();
@@ -57,6 +37,7 @@ private:
 	Model _model;
 	bool _is_dirty; // not used yet;
 //	static ChunkManager _chunk_manager;
+	GLuint _height_map[CHUNK_LAYER_SIZE];
 };
 
 typedef struct Adjacency 

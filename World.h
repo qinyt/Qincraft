@@ -15,6 +15,8 @@ class ChunkRenderer;
 #define PLAYER_SPAWN_Y(y) y + CHUNK_WIDTH_SIZE
 #define PLAYER_SPAWN_Z(z) (z+CHUNK_CENTER_Z) * CHUNK_WIDTH_SIZE
 
+#define WATER_LEVEL 5
+
 #define RENDER_DISTANCE 1
 
 class World 

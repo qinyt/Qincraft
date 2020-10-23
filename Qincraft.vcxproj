@@ -154,6 +154,7 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="ChunkManager.cpp" />
     <ClCompile Include="ChunkRenderer.cpp" />
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="NoiseGenerator.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -176,6 +178,7 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ChunkManager.h" />
     <ClInclude Include="ChunkRenderer.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Application.h" />
@@ -188,6 +191,7 @@
     <ClInclude Include="glad\glad.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="NoiseGenerator.h" />
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="NonMovable.h" />
     <ClInclude Include="Player.h" />

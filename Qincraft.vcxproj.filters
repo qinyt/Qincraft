@@ -87,6 +87,12 @@
     <ClCompile Include="SkyShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NoiseGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glad\glad.h">
@@ -174,6 +180,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SkyShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NoiseGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
