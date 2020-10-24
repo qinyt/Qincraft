@@ -26,7 +26,7 @@ Chunk::Chunk(GLint posX, GLint posZ) :
 		_blocks[i] = BlockType::DIRT;
 	}*/
 	build_block();
-	printf("chunk constructed \n");
+	//printf("chunk constructed \n");
 }
 
 void Chunk::build_block()
@@ -43,7 +43,7 @@ void Chunk::mesh()
 Chunk::~Chunk() 
 {
 	clear_mesh();
-	printf("chunk destoried \n");
+	//printf("chunk destoried \n");
 }
 
 void Chunk::clear_mesh() 

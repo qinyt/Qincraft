@@ -121,6 +121,7 @@ void World::render()
 		GLint dz = posZ - pos.z;
 		if ((dx * dx + dz * dz) > 2*RENDER_DISTANCE* RENDER_DISTANCE)
 		{
+			iter->second.get_model()->clear_data();
 			iter = map.erase(iter);
 			continue;
 		}
