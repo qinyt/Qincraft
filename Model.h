@@ -46,4 +46,6 @@ private:
 
 	RenderInfo_t _render_info;
 	GLuint _vbo;
+	GLuint _ebo;
+
 };

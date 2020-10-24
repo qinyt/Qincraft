@@ -24,9 +24,9 @@ void Model::add_data(Mesh_t* mesh)
 void Model::gen_ebo(Mesh_t* mesh) 
 {
     _render_info.indices_count = static_cast<GLuint>(mesh->indices.size());
-    GLuint ebo;
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glGenBuffers(1, &_ebo);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, _render_info.indices_count * sizeof(GLuint),
         mesh->indices.data(), GL_STATIC_DRAW);
 }
@@ -39,12 +39,14 @@ void Model::bind()
 void Model::gen_vao() 
 {
     glGenVertexArrays(1, &_render_info.vao);
+    //printf("vao gen num:%d \n", (int)_render_info.vao);
     glBindVertexArray(_render_info.vao);
 }
 
 void Model::gen_vbo(Mesh_t* mesh)
 {
     glGenBuffers(1, &_vbo);
+    //printf("vbo num:%d \n", (int)_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
     glBufferData(GL_ARRAY_BUFFER, mesh->vertices.size() * sizeof(Vertex_t), mesh->vertices.data(),
         GL_STATIC_DRAW);
@@ -60,8 +62,15 @@ void Model::clear_data()
 {
     if (_render_info.vao)
         glDeleteVertexArrays(1, &_render_info.vao);
-    if (_vbo)
+    if (_vbo) 
+    {
         glDeleteBuffers(1, &_vbo);
+    }
+    if (_ebo)
+    {
+        glDeleteBuffers(1, &_ebo);
+    }
     _render_info.reset();
     _vbo = 0;
+    _ebo = 0;
 }

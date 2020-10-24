@@ -3,13 +3,14 @@
 #include"Model.h"
 #include"Block.h"
 #include"Math.h"
+#include"NoiseGenerator.h"
 
 class Chunk;
 class ChunkManager
 {
 public:
 	ChunkManager();
-	~ChunkManager() = default;
+	~ChunkManager();
 	void build_mesh(Chunk* chunk);
 	void build_block(Chunk* chunk);
 private:
@@ -27,4 +28,5 @@ private:
 	Mesh_t* _mesh;
 	TexCoord_t* _coord;
 	TexCoordStep_t* _tex_step;
+	NoiseGenerator* noiser;
 };

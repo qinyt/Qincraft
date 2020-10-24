@@ -3,7 +3,6 @@
 #include"World.h"
 #include<memory>
 #include"ChunkManager.h"
-#include"NoiseGenerator.h"
 
 
 #define ADD_INDICE GLuint index[6]; \
@@ -23,6 +22,16 @@ static Adjacency_t adj;
 ChunkManager::ChunkManager()
 {
 	_tex_step = Block::block_manager.get_tex_coord_step();
+
+	time_t timer;
+	time(&timer);
+
+	noiser = new NoiseGenerator(timer);
+}
+
+ChunkManager::~ChunkManager() 
+{
+	delete noiser;
 }
 
 void ChunkManager::build_block(Chunk* chunk)
@@ -45,16 +54,13 @@ void ChunkManager::build_block(Chunk* chunk)
 
 void ChunkManager::build_height_map(GLuint* height_map)
 {
-	time_t timer;
-	time(&timer);
 
-	NoiseGenerator noiser = NoiseGenerator(timer);
 
 	int i, j;
 	for (j = 0; j < CHUNK_WIDTH_SIZE; ++j)
 		for (i = 0; i < CHUNK_WIDTH_SIZE; ++i)
 		{
-			height_map[i + CHUNK_WIDTH_SIZE * j] = noiser.getHeight(i, j,
+			height_map[i + CHUNK_WIDTH_SIZE * j] = noiser->getHeight(i, j,
 				_current_chunk->get_posX(), _current_chunk->get_posZ());
 		}
 }
