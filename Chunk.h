@@ -24,6 +24,7 @@ public:
 	inline bool is_meshed() const { return _is_meshed; }
 	inline Block* get_block_ptr()  { return _blocks; }
 	inline GLuint* get_height_map() { return _height_map; }
+	inline GLint* get_biome_map() { return _biome_map; }
 	void mesh();
 	void build_block();
 	void clear_mesh();
@@ -32,12 +33,13 @@ public:
 private:
 	math::VectorXZ_t _world_pos;
 	Mesh_t _mesh;
-	Block _blocks[CHUNK_VOLUME];
-	bool _is_meshed;
 	Model _model;
-	bool _is_dirty; // not used yet;
+	Block _blocks[CHUNK_VOLUME];
 //	static ChunkManager _chunk_manager;
 	GLuint _height_map[CHUNK_LAYER_SIZE];
+	GLint _biome_map[CHUNK_LAYER_SIZE];
+	bool _is_meshed;
+	bool _is_dirty; // not used yet;
 };
 
 typedef struct Adjacency 

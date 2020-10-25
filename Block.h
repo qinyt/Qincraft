@@ -4,7 +4,7 @@
 
 enum BlockType
 {
-	 GRASS, WATER, DIRT, STONE, OAKBARK, OAKLEAF, SAND, CACTUS, ROSS, AIR, NUM_OF_BLOCK_TYPE
+	Rose, TallGrass, DeadShrub,GRASS, WATER, DIRT_TOP, ROCK, MUD, OAKBARK, OAKLEAF, SAND, CACTUS, ROSS, AIR, NUM_OF_BLOCK_TYPE
 };
 
 typedef struct TexturePos
@@ -35,7 +35,7 @@ public:
 private:
 	void init_block_tex_pos();
 	void init_block_tex_coord();
-	TexCoord_t calc_tex_coord(BlockType type);
+	TexCoord_t calc_tex_coord(BlockType type, bool more_than_one_tex_side = false);
 private:
 	GLuint _tex_index_width, _tex_index_height;
 	TexCoordStep_t _tex_coord_step;

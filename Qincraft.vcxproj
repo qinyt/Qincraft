@@ -151,6 +151,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="biome\Biome.cpp" />
+    <ClCompile Include="biome\DesertBiome.cpp" />
+    <ClCompile Include="biome\GrasslandBiome.cpp" />
+    <ClCompile Include="biome\LightForest.cpp" />
+    <ClCompile Include="biome\OceanBiome.cpp" />
+    <ClCompile Include="biome\TemperateForestBiome.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chunk.cpp" />
@@ -165,6 +171,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="NoiseGenerator.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
@@ -178,6 +185,12 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="biome\Biome.h" />
+    <ClInclude Include="biome\DesertBiome.h" />
+    <ClInclude Include="biome\GrasslandBiome.h" />
+    <ClInclude Include="biome\LightForest.h" />
+    <ClInclude Include="biome\OceanBiome.h" />
+    <ClInclude Include="biome\TemperateForestBiome.h" />
     <ClInclude Include="ChunkManager.h" />
     <ClInclude Include="ChunkRenderer.h" />
     <ClInclude Include="Math.h" />

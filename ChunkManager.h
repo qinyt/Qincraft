@@ -4,6 +4,13 @@
 #include"Block.h"
 #include"Math.h"
 #include"NoiseGenerator.h"
+#include"biome\Biome.h"
+#include"biome\DesertBiome.h"
+#include"biome\GrasslandBiome.h"
+#include"biome\LightForest.h"
+#include"biome\OceanBiome.h"
+#include"biome\TemperateForestBiome.h"
+
 
 class Chunk;
 class ChunkManager
@@ -14,19 +21,27 @@ public:
 	void build_mesh(Chunk* chunk);
 	void build_block(Chunk* chunk);
 private:
-	void build_height_map(GLuint* height_map);
+	void build_biome_map(GLint* biome_map);
+	void build_height_map(GLuint* height_map, GLint* biome_map);
+	GLuint get_max_height(GLuint* height_map);
 	bool is_face_buildable(GLint* dir);
 	void try_build_front_face();
 	void try_build_back_face();
 	void try_build_up_face();
-	void try_build_down_face();
 	void try_build_left_face();
 	void try_build_right_face();
+	const Biome& getBiome(int x, int z, GLint* map) const;
 	GLint	_posX, _posY, _posZ;
 	Chunk* _current_chunk;
 	GLuint	_current_indice;
 	Mesh_t* _mesh;
 	TexCoord_t* _coord;
 	TexCoordStep_t* _tex_step;
-	NoiseGenerator* noiser;
+	NoiseGenerator noiser;
+
+	OceanBiome m_oceanBiome;
+	GrasslandBiome m_grassBiome;
+	LightForest m_lightForest;
+	TemperateForestBiome m_temperateForest;
+	DesertBiome m_desertBiome;
 };
