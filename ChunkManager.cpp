@@ -5,10 +5,6 @@
 #include"ChunkManager.h"
 #include"Random.h"
 
-namespace {
-	const int seed = RandomSingleton::get().intInRange(424, 325322);
-}
-
 #define ADD_INDICE GLuint index[6]; \
 index[0] = _current_indice + 0; \
 index[1] = _current_indice + 1; \
@@ -18,6 +14,13 @@ index[4] = _current_indice + 2; \
 index[5] = _current_indice + 3; \
 for (int i = 0; i < 6; ++i) _mesh->add_index(index[i]); \
 _current_indice += 4
+
+namespace {
+	const int seed = RandomSingleton::get().intInRange(424, 325322);
+}
+static int current_height_map[CHUNK_LAYER_SIZE];
+static int current_biome_map[CHUNK_LAYER_SIZE];
+static int cur_max_height, cur_min_height;
 
 #define likely(x)  __builtin_expect(!!(x), 1)
 
@@ -32,105 +35,119 @@ ChunkManager::ChunkManager()
 	, noiser(seed)
 {
 	_tex_step = Block::block_manager.get_tex_coord_step();
-
-	time_t timer;
-	time(&timer);
 }
 
 ChunkManager::~ChunkManager() {}
 
-void ChunkManager::build_block(Chunk* chunk)
+void ChunkManager::build_cylinder(ChunkCylinder* cy) 
 {
-	_current_chunk = chunk;
-	Block* blocks = _current_chunk->get_block_ptr();
-	GLuint* height_map = _current_chunk->get_height_map();
-	GLint*  biome_map  = _current_chunk->get_biome_map();
-	build_biome_map(biome_map);
-	build_height_map(height_map, biome_map);
-	GLuint max_height = get_max_height(height_map);
-	GLuint x, y, z;
-	for (y = 0; y < max_height; ++y)
-	for (z = 0; z < CHUNK_WIDTH_SIZE; ++z)
-	for (x = 0; x < CHUNK_WIDTH_SIZE; ++x) 
+	_cur_chunk_cylinder = cy;
+	build_biome_map();
+	build_height_map();
+	get_max_min_height();
+	_cur_chunk_cylinder->set_max_height(cur_max_height);
+	_cur_chunk_cylinder->set_min_height(cur_min_height);
+	_cur_chunk_cylinder->add_chunk();
+	build_block();
+}
+
+void ChunkManager::build_block()
+{
+	int x, y, z;
+	for (auto& chunk : _cur_chunk_cylinder->get_chunks()) 
 	{
-		int real_y = y % CHUNK_WIDTH_SIZE;
-		GLuint height = height_map[x + CHUNK_WIDTH_SIZE * z];
-		int idx = real_y * CHUNK_LAYER_SIZE + z * CHUNK_WIDTH_SIZE + x;
-		if (y > height) blocks[idx] = BlockType::AIR;
-		else blocks[idx] = BlockType::DIRT_TOP;
+		Block* blocks = chunk.get_block_ptr();
+		int baseY = chunk.get_pos().y * CHUNK_WIDTH_SIZE;
+		int delta = ((cur_max_height - baseY * CHUNK_WIDTH_SIZE) < CHUNK_WIDTH_SIZE) ?
+					cur_max_height : baseY + CHUNK_WIDTH_SIZE;
+		for (y = baseY; y < delta; ++y)
+		for (z = 0; z < CHUNK_WIDTH_SIZE; ++z)
+		for (x = 0; x < CHUNK_WIDTH_SIZE; ++x) 
+		{
+			int deltaY = y % CHUNK_WIDTH_SIZE;
+			int idx = deltaY * CHUNK_LAYER_SIZE + z * CHUNK_WIDTH_SIZE + x;
+			int height = current_height_map[x + CHUNK_WIDTH_SIZE * z];
+			if (y > height) blocks[idx] = BlockType::AIR;
+			else blocks[idx] = BlockType::DIRT_TOP;
+		}
 	}
 }
 
-void ChunkManager::build_biome_map(GLint* biome_map)
+void ChunkManager::build_biome_map()
 {
-	GLint* map = biome_map;
+	GLint* map = current_biome_map;
 	int i, j;
-	int x = _current_chunk->get_posX();
-	int z = _current_chunk->get_posZ();
+	int x = _cur_chunk_cylinder->get_pos().x;
+	int z = _cur_chunk_cylinder->get_pos().z;
 	for (j = 0; j < CHUNK_WIDTH_SIZE; ++j)
 	for (i = 0; i < CHUNK_WIDTH_SIZE; ++i)
 	{
-		map[i + CHUNK_WIDTH_SIZE * j] = (GLint) (noiser.getHeight(i, j, x, z));
+		map[i + CHUNK_WIDTH_SIZE * j] = (int) (noiser.getHeight(i, j, x, z));
 	}
 }
 
-GLuint ChunkManager::get_max_height(GLuint* height_map)
+void ChunkManager::get_max_min_height()
 {
-	GLuint* map = height_map;
-	GLuint r = 0;
+	int* map = current_height_map;
+	cur_max_height = 0;
+	cur_min_height = 99999;
 	for (int i = 0; i < CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE; ++i) 
 	{
-		if (map[i] > r) r = map[i];
+		if (map[i] > cur_max_height) cur_max_height = map[i];
+		if (map[i] < cur_min_height) cur_min_height = map[i];
 	}
-	return r;
 }
 
-
-void ChunkManager::build_height_map(GLuint* height_map, GLint* biome_map)
+void ChunkManager::build_height_map()
 {
-	GLint* bio_map = biome_map;
-	GLuint* map = height_map;
+	int* bio_map = current_biome_map;
+	int* map = current_height_map;
 	int i, j;
-	int x = _current_chunk->get_posX();
-	int z = _current_chunk->get_posZ();
+	int x = _cur_chunk_cylinder->get_pos().x;
+	int z = _cur_chunk_cylinder->get_pos().z;
 	for (j = 0; j < CHUNK_WIDTH_SIZE; ++j)
 		for (i = 0; i < CHUNK_WIDTH_SIZE; ++i)
 		{
-			//map[i + CHUNK_WIDTH_SIZE * j] = noiser.getHeight(i, j, x, z);
+			//TODO: use interpolation to optimize
 			int h = (getBiome(i, j, bio_map).getHeight(i, j, x, z));
-			//printf("height generated:%d\n", h);
-			map[i + CHUNK_WIDTH_SIZE * j] = (GLuint)h;
+			map[i + CHUNK_WIDTH_SIZE * j] = h;
 		}
 }
 
-void ChunkManager::build_mesh(Chunk* chunk)
+void ChunkManager::build_mesh(ChunkCylinder* cy)
 {
-	_current_chunk = chunk;
-	_current_chunk->clear_mesh();
-	_current_indice = 0;
-	GLint world_posX = _current_chunk->get_posX();
-	GLint world_posZ = _current_chunk->get_posZ();
-
-	_mesh = _current_chunk->get_mesh();
-	Block* blocks = _current_chunk->get_block_ptr();
-
-	//TODO:use max_height
-	for (_posY = 0; _posY < CHUNK_WIDTH_SIZE; ++_posY)
+	_cur_chunk_cylinder = cy;
+	int max_h = _cur_chunk_cylinder->get_max_height();
+	for (auto& chunk : _cur_chunk_cylinder->get_chunks())
 	{
-		for (_posZ = world_posZ * CHUNK_WIDTH_SIZE; _posZ < world_posZ * CHUNK_WIDTH_SIZE + CHUNK_WIDTH_SIZE; ++_posZ)
+		chunk.clear_mesh();
+		_current_indice = 0;
+		_mesh = chunk.get_mesh();
+		Block* blocks = chunk.get_block_ptr();
+
+		auto pos = chunk.get_pos();
+		int base = pos.y * CHUNK_WIDTH_SIZE;
+		int delta =  max_h % CHUNK_WIDTH_SIZE;
+		int lz = pos.z * CHUNK_WIDTH_SIZE;
+		int lx = pos.x * CHUNK_WIDTH_SIZE;
+		for (_posY = base; _posY < base + delta; ++_posY)
 		{
-			for (_posX = world_posX * CHUNK_WIDTH_SIZE; _posX < world_posX * CHUNK_WIDTH_SIZE + CHUNK_WIDTH_SIZE; ++_posX)
+			for (_posZ = lz; _posZ < lz + CHUNK_WIDTH_SIZE; ++_posZ)
 			{
-				GLint lx = _posX - world_posX * CHUNK_WIDTH_SIZE;
-				GLint lz = _posZ - world_posZ * CHUNK_WIDTH_SIZE;
-				auto block_type = blocks[_posY * CHUNK_LAYER_SIZE + lz * CHUNK_WIDTH_SIZE + lx].get_type();
-				if (block_type == BlockType::AIR) continue;
-				_coord = Block::block_manager.get_tex_coord(block_type);
-				try_build_front_face();
-				try_build_back_face();
-				try_build_up_face();
-				try_build_left_face();
-				try_build_right_face();
+				for (_posX = lx; _posX < lx + CHUNK_WIDTH_SIZE; ++_posX)
+				{
+					int ix = _posX - lx;
+					int iz = _posZ - lz;
+					int iy = _posY - base;
+					auto block_type = blocks[iy * CHUNK_LAYER_SIZE + iz * CHUNK_WIDTH_SIZE + ix].get_type();
+					if (block_type == BlockType::AIR) continue;
+					_coord = Block::block_manager.get_tex_coord(block_type);
+					try_build_front_face();
+					try_build_back_face();
+					try_build_up_face();
+					try_build_left_face();
+					try_build_right_face();
+				}
 			}
 		}
 	}
@@ -244,13 +261,29 @@ void ChunkManager::try_build_right_face()
 
 bool ChunkManager::is_face_buildable(GLint* dir)
 {
-	GLint pos[3] = { _posX, _posY, _posZ };
+	int pos[3] = { _posX, _posY, _posZ };
 	math::vec3i_add(pos, dir, pos);
+	
+	BlockType type;
 #if 0
-	auto type = World::get_block_type(pos[0], pos[1], pos[2]);
+	type = World::get_block_type(pos[0], pos[1], pos[2]);
 #else
-	auto type = _current_chunk->get_block_type_within_chunk(pos[0], pos[1], pos[2]);
-#endif	
+	int a = pos[0] % CHUNK_WIDTH_SIZE;
+	int c = pos[2] % CHUNK_WIDTH_SIZE;
+	bool inside = !(a == 0 || a == CHUNK_WIDTH_SIZE - 1 || c == 0 || c == CHUNK_WIDTH_SIZE - 1);
+	if(inside)
+	{
+		auto base = _cur_chunk_cylinder->get_pos();
+		int ix = pos[0] - base.x * CHUNK_WIDTH_SIZE;
+		int iz = pos[2] - base.z * CHUNK_WIDTH_SIZE;
+		type = _cur_chunk_cylinder->get_block_within(ix, pos[1], iz);
+	}
+	else 
+	{
+		type = World::get_block_type(pos[0], pos[1], pos[2]);
+	}
+	
+#endif
 	if (type != BlockType::AIR)
 	{
 		return false;
@@ -262,26 +295,26 @@ bool ChunkManager::is_face_buildable(GLint* dir)
 const Biome& ChunkManager::getBiome(int x, int z, GLint* map) const
 {
 	GLint biomeValue = map[x + CHUNK_WIDTH_SIZE * z];
-
-	if (biomeValue > 160) {
-		return m_oceanBiome;
-	}
-	else if (biomeValue > 150) {
-		return m_grassBiome;
-	}
-	else if (biomeValue > 130) {
-		return m_lightForest;
-	}
-	else if (biomeValue > 120) {
-		return m_temperateForest;
-	}
-	else if (biomeValue > 110) {
-		return m_lightForest;
-	}
-	else if (biomeValue > 100) {
-		return m_grassBiome;
-	}
-	else {
-		return m_desertBiome;
-	}
+	return m_grassBiome;
+	//if (biomeValue > 160) {
+	//	return m_oceanBiome;
+	//}
+	//else if (biomeValue > 150) {
+	//	return m_grassBiome;
+	//}
+	//else if (biomeValue > 130) {
+	//	return m_lightForest;
+	//}
+	//else if (biomeValue > 120) {
+	//	return m_temperateForest;
+	//}
+	//else if (biomeValue > 110) {
+	//	return m_lightForest;
+	//}
+	//else if (biomeValue > 100) {
+	//	return m_grassBiome;
+	//}
+	//else {
+	//	return m_desertBiome;
+	//}
 }

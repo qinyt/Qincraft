@@ -11,19 +11,31 @@
 #include"biome\OceanBiome.h"
 #include"biome\TemperateForestBiome.h"
 
+typedef struct Adjacency
+{
+	GLint up[3] = { 0,  1,  0 };
+	GLint down[3] = { 0, -1,  0 };
+	GLint left[3] = { -1,  0,  0 };
+	GLint right[3] = { 1,  0,  0 };
+	GLint front[3] = { 0,  0, -1 };
+	GLint back[3] = { 0,  0,  1 };
+}Adjacency_t;
 
+class ChunkCylinder;
 class Chunk;
+
 class ChunkManager
 {
 public:
 	ChunkManager();
 	~ChunkManager();
-	void build_mesh(Chunk* chunk);
-	void build_block(Chunk* chunk);
+	void build_mesh(ChunkCylinder* cy);
+	void build_cylinder(ChunkCylinder* cy);
 private:
-	void build_biome_map(GLint* biome_map);
-	void build_height_map(GLuint* height_map, GLint* biome_map);
-	GLuint get_max_height(GLuint* height_map);
+	void build_block();
+	void build_biome_map();
+	void build_height_map();
+	void get_max_min_height();
 	bool is_face_buildable(GLint* dir);
 	void try_build_front_face();
 	void try_build_back_face();
@@ -32,7 +44,7 @@ private:
 	void try_build_right_face();
 	const Biome& getBiome(int x, int z, GLint* map) const;
 	GLint	_posX, _posY, _posZ;
-	Chunk* _current_chunk;
+	ChunkCylinder* _cur_chunk_cylinder;
 	GLuint	_current_indice;
 	Mesh_t* _mesh;
 	TexCoord_t* _coord;

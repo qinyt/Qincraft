@@ -9,7 +9,7 @@ namespace math
 
 	typedef struct VectorXZ 
 	{
-		GLint x, z;
+		int x, z;
 	}VectorXZ_t;
     bool operator==(const VectorXZ& left, const VectorXZ& right) noexcept;
 }

@@ -13,7 +13,7 @@ public:
 	void update() override;
 	inline glm::vec3* get_forward_dir() { return &_dir_forward; }
 	inline glm::vec3* get_up_dir() { return &_dir_up; }
-
+	void set_y_pos(float y);
 private:
 	void handle_input();
 	void handle_mouse();

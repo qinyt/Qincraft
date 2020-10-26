@@ -5,9 +5,9 @@
 int main(int argc, char** argv)
 {
 	//FIXME: stack or heap ?
-	App app;
-	app.init();
-	app.loop();
+	App* app = new App();
+	app->init();
+	app->loop();
 	return 1;
 }
 

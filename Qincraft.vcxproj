@@ -160,6 +160,7 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="ChunkCylider.cpp" />
     <ClCompile Include="ChunkManager.cpp" />
     <ClCompile Include="ChunkRenderer.cpp" />
     <ClCompile Include="FileUtil.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="biome\LightForest.h" />
     <ClInclude Include="biome\OceanBiome.h" />
     <ClInclude Include="biome\TemperateForestBiome.h" />
+    <ClInclude Include="ChunkCylinder.h" />
     <ClInclude Include="ChunkManager.h" />
     <ClInclude Include="ChunkRenderer.h" />
     <ClInclude Include="Math.h" />

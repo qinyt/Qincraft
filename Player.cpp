@@ -11,7 +11,7 @@ Player::Player():
 	_head(0.0f * DEGREE_TO_RADIAN),
 	_pitch(80.0f)
 {
-	_position = glm::vec3(PLAYER_SPAWN_X(0), PLAYER_SPAWN_Y(10), PLAYER_SPAWN_Z(0));
+	_position = glm::vec3(PLAYER_SPAWN_X(0), PLAYER_SPAWN_Y(100), PLAYER_SPAWN_Z(0));
 	_dir_forward = glm::vec3(0.0f, 0.0f, -1.0f);
 	_acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
 }
@@ -98,3 +98,5 @@ void Player::handle_input()
 }
 
 void Player::render() {}
+
+void Player::set_y_pos(float y) { _position.y = y; }

@@ -4,7 +4,7 @@
 
 #define sleep_millisecons(x) std::this_thread::sleep_for(std::chrono::milliseconds(50))
 
-std::unordered_map<math::VectorXZ_t, Chunk> World::map;
+std::unordered_map<math::VectorXZ_t, ChunkCylinder> World::map;
 
 #if 1
 #define LOCK _chunk_mtx.lock();
@@ -18,40 +18,37 @@ std::unordered_map<math::VectorXZ_t, Chunk> World::map;
 World::World() :
 	_chunk_building_thd([&]()
 {
-	GLint posX, posZ;
+	int posX, posZ;
 	while (1) 
 	{
 		posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
 		posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
 		LOCK;
-		for(GLint i = -RENDER_DISTANCE; i < RENDER_DISTANCE+1; ++i)
-			for (GLint j = -RENDER_DISTANCE; j < RENDER_DISTANCE+1; ++j)
+		for(int i = -RENDER_DISTANCE; i < RENDER_DISTANCE+1; ++i)
+			for (int j = -RENDER_DISTANCE; j < RENDER_DISTANCE+1; ++j)
 			{
-				GLint x = posX + j;
-				GLint z = posZ + i;
-				if (!is_chunk_exist(x, z)) 
+				int x = posX + j;
+				int z = posZ + i;
+				if (!is_chunk_cylinder_exist(x, z)) 
 				{
 					//TODO: async the process
-					Chunk chunk(x, z);
-					push_chunk(chunk);
+					ChunkCylinder chunk_cylinder(x, z);
+					push_chunk(chunk_cylinder);
 				}
 			}
-		//GLint posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
-		//GLint posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
-		//LOCK;
 
 		// must add chunk first, THEN mesh. Otherwise, the meshing process is wrong.
-		for (GLint i = -RENDER_DISTANCE; i < RENDER_DISTANCE; ++i)
-			for (GLint j = -RENDER_DISTANCE; j < RENDER_DISTANCE; ++j)
+		for (int i = -RENDER_DISTANCE; i < RENDER_DISTANCE; ++i)
+			for (int j = -RENDER_DISTANCE; j < RENDER_DISTANCE; ++j)
 			{
-				GLint x = posX + j;
-				GLint z = posZ + i;
+				int x = posX + j;
+				int z = posZ + i;
 				math::VectorXZ_t key = { x, z };
 				if (map.find(key) == map.end()) continue;
-				auto& chunk = map.at(key);
-				if (chunk.is_meshed() == false)
+				auto& chunk_cylinder = map.at(key);
+				if (chunk_cylinder.is_meshed() == false)
 				{
-					chunk.mesh();
+					chunk_cylinder.mesh();
 				}
 			}
 		//printf("map size: %d\n", map.size());
@@ -68,34 +65,36 @@ World::~World()
 	_chunk_building_thd.join();
 }
 
-std::unordered_map<math::VectorXZ_t, Chunk>* World::get_map() 
+std::unordered_map<math::VectorXZ_t, ChunkCylinder>* World::get_map()
 {
 	return &map;
 }
 
-bool World::is_chunk_exist(GLint x, GLint y) 
+bool World::is_chunk_cylinder_exist(int x, int y) 
 {
 	math::VectorXZ_t key = { x, y};
 	return (map.find(key) != map.end());
 }
 
-void World::push_chunk(Chunk& chunk) 
+void World::push_chunk(ChunkCylinder& chunk) 
 {
 	map.emplace(chunk.get_pos(), chunk);
 }
 
-
-BlockType World::get_block_type(GLint x, GLint y, GLint z) 
+BlockType World::get_block_type(int x, int y, int z) 
 {
-	auto world_posX = x / CHUNK_WIDTH_SIZE;
-	auto world_posZ = z / CHUNK_WIDTH_SIZE;
-	
+	int world_posX = static_cast<int>(x / CHUNK_WIDTH_SIZE);
+	int world_posZ = static_cast<int>(z / CHUNK_WIDTH_SIZE);
+
 	math::VectorXZ_t key = { world_posX, world_posZ };
 	if (map.find(key) == map.end())
 		return BlockType::AIR;
-	Chunk& chunk = map.at(key);
+	ChunkCylinder& cy = map.at(key);	
 
-	return chunk.get_block_type_within_chunk(x, y, z);
+	int ix = x - world_posX * CHUNK_WIDTH_SIZE;
+	int iz = z - world_posZ * CHUNK_WIDTH_SIZE;
+
+	return cy.get_block_within(ix, y, iz);
 }
 
 void World::set_chunk_renderer(ChunkRenderer* renderer) 
@@ -111,8 +110,8 @@ void World::update()
 
 void World::render() 
 {
-	GLint posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
-	GLint posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
+	int posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
+	int posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
 	LOCK;
 	for (auto iter = map.begin(); iter != map.end();)
 	{
@@ -121,16 +120,17 @@ void World::render()
 		GLint dz = posZ - pos.z;
 		if ((dx * dx + dz * dz) > 2*RENDER_DISTANCE* RENDER_DISTANCE)
 		{
-			iter->second.get_model()->clear_data();
+			for(auto& chunk: iter->second.get_chunks()) 
+				chunk.get_model()->clear_data();
 			iter = map.erase(iter);
 			continue;
 		}
-		auto& chunk = iter->second;
-		chunk.add_data_to_GPU();
-		_chunk_renderer->add_chunk(&chunk);
+		for (auto& chunk : iter->second.get_chunks()) 
+		{
+			chunk.add_data_to_GPU();
+			_chunk_renderer->add_chunk(&chunk);
+		}
 		++iter;
 	}
-
-	//map.clear();
 	UNLOCK;
 }
