@@ -50,12 +50,6 @@ void ChunkCylinder::add_chunk(int x, int y, int z)
 bool ChunkCylinder::is_meshed() 
 {
 	return _meshed;
-	/*for (auto& chunk : _chunks) 
-	{
-		if (!chunk.is_meshed())
-			return false;
-	}
-	return true;*/
 }
 
 void ChunkCylinder::mesh() 

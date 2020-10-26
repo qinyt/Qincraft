@@ -69,9 +69,9 @@ void App::loop()
         ++frames;
         poll_event();
         
-        if (App::keyboard.is_key_down(sf::Keyboard::Key::Space)) 
+        if (App::keyboard.is_key_down(sf::Keyboard::Key::Escape)) 
         {
-            printf("space pressed\n");
+            printf("ESC pressed\n");
             exit(0);
         }
 

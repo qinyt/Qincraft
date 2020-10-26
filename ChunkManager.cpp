@@ -15,14 +15,11 @@ index[5] = _current_indice + 3; \
 for (int i = 0; i < 6; ++i) _mesh->add_index(index[i]); \
 _current_indice += 4
 
-namespace {
-	const int seed = RandomSingleton::get().intInRange(424, 325322);
-}
+const int seed = RandomSingleton::get().intInRange(424, 325322);
+
 static int current_height_map[CHUNK_LAYER_SIZE];
 static int current_biome_map[CHUNK_LAYER_SIZE];
 static int cur_max_height, cur_min_height;
-
-#define likely(x)  __builtin_expect(!!(x), 1)
 
 static Adjacency_t adj;
 
@@ -54,21 +51,26 @@ void ChunkManager::build_cylinder(ChunkCylinder* cy)
 void ChunkManager::build_block()
 {
 	int x, y, z;
-	for (auto& chunk : _cur_chunk_cylinder->get_chunks()) 
+	int baseY = (_cur_chunk_cylinder->get_min_height()/ CHUNK_WIDTH_SIZE) * CHUNK_WIDTH_SIZE;
+	int topY  = _cur_chunk_cylinder->get_max_height();
+	for (y = baseY; y < topY; ++y) 
 	{
-		Block* blocks = chunk.get_block_ptr();
-		int baseY = chunk.get_pos().y * CHUNK_WIDTH_SIZE;
-		int delta = ((cur_max_height - baseY * CHUNK_WIDTH_SIZE) < CHUNK_WIDTH_SIZE) ?
-					cur_max_height : baseY + CHUNK_WIDTH_SIZE;
-		for (y = baseY; y < delta; ++y)
+		Chunk* chunk = _cur_chunk_cylinder->get_chunk(y);
+		Block* blocks = chunk->get_block_ptr();
 		for (z = 0; z < CHUNK_WIDTH_SIZE; ++z)
 		for (x = 0; x < CHUNK_WIDTH_SIZE; ++x) 
 		{
 			int deltaY = y % CHUNK_WIDTH_SIZE;
 			int idx = deltaY * CHUNK_LAYER_SIZE + z * CHUNK_WIDTH_SIZE + x;
 			int height = current_height_map[x + CHUNK_WIDTH_SIZE * z];
-			if (y > height) blocks[idx] = BlockType::AIR;
-			else blocks[idx] = BlockType::DIRT_TOP;
+			if (y > height) 
+			{
+				blocks[idx] = BlockType::AIR;
+			}
+			else 
+			{
+				blocks[idx] = BlockType::DIRT_TOP;
+			}
 		}
 	}
 }
