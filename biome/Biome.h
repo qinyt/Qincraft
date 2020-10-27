@@ -15,10 +15,10 @@ struct Biome {
           int seed);
     virtual ~Biome() = default;
 
-    virtual Block getPlant(Rand &rand) const = 0;
-    virtual Block getTopBlock(Rand &rand) const = 0;
-    virtual Block getUnderWaterBlock(Rand &rand) const = 0;
-    virtual Block getBeachBlock(Rand &rand) const;
+    virtual BlockType getPlant(Rand &rand) const = 0;
+    virtual BlockType getTopBlock(Rand &rand) const = 0;
+    virtual BlockType getUnderWaterBlock(Rand &rand) const = 0;
+    virtual BlockType getBeachBlock(Rand &rand) const;
     virtual void makeTree(Rand &rand, Chunk &chunk, int x, int y,
                           int z) const = 0;
 

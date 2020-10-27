@@ -7,12 +7,12 @@ LightForest::LightForest(int seed)
 {
 }
 
-Block LightForest::getTopBlock(Rand &rand) const
+BlockType LightForest::getTopBlock(Rand &rand) const
 {
-    return BlockType::GRASS;
+    return BlockType::TallGrass;
 }
 
-Block LightForest::getUnderWaterBlock(Rand &rand) const
+BlockType LightForest::getUnderWaterBlock(Rand &rand) const
 {
     return rand.intInRange(0, 10) > 9 ? BlockType::SAND : BlockType::MUD;
 }
@@ -34,7 +34,7 @@ NoiseParameters LightForest::getNoiseParameters()
     return heightParams;
 }
 
-Block LightForest::getPlant(Rand &rand) const
+BlockType LightForest::getPlant(Rand &rand) const
 {
     return rand.intInRange(0, 10) > 8 ? BlockType::Rose : BlockType::TallGrass;
 }

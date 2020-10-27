@@ -20,7 +20,9 @@ void BlockManager::init_block_tex_pos()
 	block_tex_pos[BlockType::GRASS] = { 0, 0 };
 	block_tex_pos[BlockType::ROCK] = { 3, 0 };
 	block_tex_pos[BlockType::MUD] = { 4, 0 };
-	block_tex_pos[BlockType::SAND] = { 7, 0 };
+	block_tex_pos[BlockType::SAND] = { 7, 0 }; 
+	block_tex_pos[BlockType::TallGrass] = { 6, 0 };
+
 }
 
 void BlockManager::init_block_tex_coord()

@@ -7,12 +7,12 @@ TemperateForestBiome::TemperateForestBiome(int seed)
 {
 }
 
-Block TemperateForestBiome::getTopBlock(Rand &rand) const
+BlockType TemperateForestBiome::getTopBlock(Rand &rand) const
 {
     return rand.intInRange(0, 10) < 8 ? BlockType::GRASS : BlockType::MUD;
 }
 
-Block TemperateForestBiome::getUnderWaterBlock(Rand &rand) const
+BlockType TemperateForestBiome::getUnderWaterBlock(Rand &rand) const
 {
     return rand.intInRange(0, 10) > 8 ? BlockType::MUD : BlockType::SAND;
 }
@@ -35,7 +35,7 @@ NoiseParameters TemperateForestBiome::getNoiseParameters()
     return heightParams;
 }
 
-Block TemperateForestBiome::getPlant(Rand &rand) const
+BlockType TemperateForestBiome::getPlant(Rand &rand) const
 {
     return BlockType::TallGrass;
 }

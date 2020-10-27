@@ -9,7 +9,7 @@ Biome::Biome(const NoiseParameters &parameters, int treeFreq, int plantFreq,
     m_heightGenerator.setParameters(parameters);
 }
 
-Block Biome::getBeachBlock(Rand &rand) const
+BlockType Biome::getBeachBlock(Rand &rand) const
 {
     return BlockType::SAND;
 }

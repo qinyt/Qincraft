@@ -7,12 +7,12 @@ OceanBiome::OceanBiome(int seed)
 {
 }
 
-Block OceanBiome::getTopBlock(Rand &rand) const
+BlockType OceanBiome::getTopBlock(Rand &rand) const
 {
     return BlockType::GRASS;
 }
 
-Block OceanBiome::getUnderWaterBlock(Rand &rand) const
+BlockType OceanBiome::getUnderWaterBlock(Rand &rand) const
 {
     return BlockType::SAND;
 }
@@ -35,7 +35,7 @@ NoiseParameters OceanBiome::getNoiseParameters()
     return heightParams;
 }
 
-Block OceanBiome::getPlant(Rand &rand) const
+BlockType OceanBiome::getPlant(Rand &rand) const
 {
     return rand.intInRange(0, 10) > 6 ? BlockType::Rose : BlockType::TallGrass;
 }

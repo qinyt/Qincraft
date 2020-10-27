@@ -7,9 +7,9 @@ class LightForest : public Biome {
   public:
     LightForest(int seed);
 
-    Block getPlant(Rand &rand) const override;
-    Block getTopBlock(Rand &rand) const override;
-    Block getUnderWaterBlock(Rand &rand) const override;
+   BlockType getPlant(Rand &rand) const override;
+   BlockType getTopBlock(Rand &rand) const override;
+   BlockType getUnderWaterBlock(Rand &rand) const override;
     void makeTree(Rand &rand, Chunk &chunk, int x, int y, int z) const override;
 
   private:

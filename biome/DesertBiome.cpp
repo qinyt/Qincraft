@@ -8,12 +8,12 @@ DesertBiome::DesertBiome(int seed)
 {
 }
 
-Block DesertBiome::getTopBlock(Rand &rand) const
+BlockType DesertBiome::getTopBlock(Rand &rand) const
 {
     return BlockType::SAND;
 }
 
-Block DesertBiome::getUnderWaterBlock(Rand &rand) const
+BlockType DesertBiome::getUnderWaterBlock(Rand &rand) const
 {
     return BlockType::SAND;
 }
@@ -45,7 +45,7 @@ NoiseParameters DesertBiome::getNoiseParameters()
     return heightParams;
 }
 
-Block DesertBiome::getPlant(Rand &rand) const
+BlockType DesertBiome::getPlant(Rand &rand) const
 {
     return BlockType::DeadShrub;
 }

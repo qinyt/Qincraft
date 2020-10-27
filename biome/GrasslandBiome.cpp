@@ -7,17 +7,17 @@ GrasslandBiome::GrasslandBiome(int seed)
 {
 }
 
-Block GrasslandBiome::getTopBlock(Rand &rand) const
+BlockType GrasslandBiome::getTopBlock(Rand &rand) const
 {
     return BlockType::DIRT_TOP;
 }
 
-Block GrasslandBiome::getUnderWaterBlock(Rand &rand) const
+BlockType GrasslandBiome::getUnderWaterBlock(Rand &rand) const
 {
     return rand.intInRange(0, 10) > 8 ? BlockType::DIRT_TOP: BlockType::SAND;
 }
 
-Block GrasslandBiome::getBeachBlock(Rand &rand) const
+BlockType GrasslandBiome::getBeachBlock(Rand &rand) const
 {
     return rand.intInRange(0, 10) > 2 ? BlockType::DIRT_TOP : BlockType::MUD;
 }
@@ -40,7 +40,7 @@ NoiseParameters GrasslandBiome::getNoiseParameters()
     return heightParams;
 }
 
-Block GrasslandBiome::getPlant(Rand &rand) const
+BlockType GrasslandBiome::getPlant(Rand &rand) const
 {
     return rand.intInRange(0, 10) > 6 ? BlockType::Rose : BlockType::TallGrass;
 }

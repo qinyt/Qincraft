@@ -32,6 +32,19 @@ ChunkManager::ChunkManager()
 	, noiser(seed)
 {
 	_tex_step = Block::block_manager.get_tex_coord_step();
+	setup_noise();
+}
+
+void ChunkManager::setup_noise() 
+{
+	NoiseParameters biomeParmams;
+	biomeParmams.octaves = 5;
+	biomeParmams.amplitude = 120;
+	biomeParmams.smoothness = 1035;
+	biomeParmams.heightOffset = 0;
+	biomeParmams.roughness = 0.75;
+
+	noiser.setParameters(biomeParmams);
 }
 
 ChunkManager::~ChunkManager() {}
@@ -50,6 +63,7 @@ void ChunkManager::build_cylinder(ChunkCylinder* cy)
 
 void ChunkManager::build_block()
 {
+	Rand r;
 	int x, y, z;
 	int baseY = (_cur_chunk_cylinder->get_min_height()/ CHUNK_WIDTH_SIZE) * CHUNK_WIDTH_SIZE;
 	int topY  = _cur_chunk_cylinder->get_max_height();
@@ -67,9 +81,18 @@ void ChunkManager::build_block()
 			{
 				blocks[idx] = BlockType::AIR;
 			}
+			else if(y == height)
+			{
+				blocks[idx] = getBiome(x, z).getTopBlock(r);
+			}
+			else if(y > height - 3)
+			{
+
+				blocks[idx] = BlockType::MUD;
+			}
 			else 
 			{
-				blocks[idx] = BlockType::DIRT_TOP;
+				blocks[idx] = BlockType::ROCK;
 			}
 		}
 	}
@@ -102,7 +125,6 @@ void ChunkManager::get_max_min_height()
 
 void ChunkManager::build_height_map()
 {
-	int* bio_map = current_biome_map;
 	int* map = current_height_map;
 	int i, j;
 	int x = _cur_chunk_cylinder->get_pos().x;
@@ -111,7 +133,7 @@ void ChunkManager::build_height_map()
 		for (i = 0; i < CHUNK_WIDTH_SIZE; ++i)
 		{
 			//TODO: use interpolation to optimize
-			int h = (getBiome(i, j, bio_map).getHeight(i, j, x, z));
+			int h = (getBiome(i, j).getHeight(i, j, x, z));
 			map[i + CHUNK_WIDTH_SIZE * j] = h;
 		}
 }
@@ -269,7 +291,7 @@ void ChunkManager::try_build_right_face()
 	ADD_INDICE;
 }
 
-bool ChunkManager::is_face_buildable(GLint* dir)
+bool ChunkManager::is_face_buildable(int* dir)
 {
 	int pos[3] = { _posX, _posY, _posZ };
 	math::vec3i_add(pos, dir, pos);
@@ -302,29 +324,29 @@ bool ChunkManager::is_face_buildable(GLint* dir)
 }
 
 
-const Biome& ChunkManager::getBiome(int x, int z, GLint* map) const
+const Biome& ChunkManager::getBiome(int x, int z) const
 {
-	GLint biomeValue = map[x + CHUNK_WIDTH_SIZE * z];
-	return m_grassBiome;
-	//if (biomeValue > 160) {
-	//	return m_oceanBiome;
-	//}
-	//else if (biomeValue > 150) {
-	//	return m_grassBiome;
-	//}
-	//else if (biomeValue > 130) {
-	//	return m_lightForest;
-	//}
-	//else if (biomeValue > 120) {
-	//	return m_temperateForest;
-	//}
-	//else if (biomeValue > 110) {
-	//	return m_lightForest;
-	//}
-	//else if (biomeValue > 100) {
-	//	return m_grassBiome;
-	//}
-	//else {
-	//	return m_desertBiome;
-	//}
+	int biomeValue = current_biome_map[x + CHUNK_WIDTH_SIZE * z];
+	
+	if (biomeValue > 160) {
+		return m_oceanBiome;
+	}
+	else if (biomeValue > 150) {
+		return m_grassBiome;
+	}
+	else if (biomeValue > 130) {
+		return m_lightForest;
+	}
+	else if (biomeValue > 120) {
+		return m_temperateForest;
+	}
+	else if (biomeValue > 110) {
+		return m_lightForest;
+	}
+	else if (biomeValue > 100) {
+		return m_grassBiome;
+	}
+	else {
+		return m_desertBiome;
+	}
 }

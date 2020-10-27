@@ -46,7 +46,6 @@ World::World() :
 				int x = posX + j;
 				int z = posZ + i;
 				math::VectorXZ_t key = { x, z };
-//				if (x == 499 && z == 499) __debugbreak();
 				if (map.find(key) == map.end()) continue;
 				auto& chunk_cylinder = map.at(key);
 				if (chunk_cylinder.is_meshed() == false)
