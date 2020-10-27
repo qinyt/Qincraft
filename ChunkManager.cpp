@@ -129,7 +129,15 @@ void ChunkManager::build_mesh(ChunkCylinder* cy)
 
 		auto pos = chunk.get_pos();
 		int base = pos.y * CHUNK_WIDTH_SIZE;
-		int delta =  max_h % CHUNK_WIDTH_SIZE;
+		int delta;
+		if ((base + CHUNK_WIDTH_SIZE) <= max_h) 
+		{
+			delta = CHUNK_WIDTH_SIZE;
+		}
+		else 
+		{
+			delta = max_h % CHUNK_WIDTH_SIZE;
+		}
 		int lz = pos.z * CHUNK_WIDTH_SIZE;
 		int lx = pos.x * CHUNK_WIDTH_SIZE;
 		for (_posY = base; _posY < base + delta; ++_posY)

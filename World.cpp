@@ -1,6 +1,8 @@
 #include"World.h"
 #include<chrono>
 #include"Game.h"
+#include"Application.h"
+
 
 #define sleep_millisecons(x) std::this_thread::sleep_for(std::chrono::milliseconds(50))
 
@@ -38,12 +40,13 @@ World::World() :
 			}
 
 		// must add chunk first, THEN mesh. Otherwise, the meshing process is wrong.
-		for (int i = -RENDER_DISTANCE; i < RENDER_DISTANCE; ++i)
-			for (int j = -RENDER_DISTANCE; j < RENDER_DISTANCE; ++j)
+		for (int i = -DELETE_DISTANCE; i < DELETE_DISTANCE; ++i)
+			for (int j = -DELETE_DISTANCE; j < DELETE_DISTANCE; ++j)
 			{
 				int x = posX + j;
 				int z = posZ + i;
 				math::VectorXZ_t key = { x, z };
+//				if (x == 499 && z == 499) __debugbreak();
 				if (map.find(key) == map.end()) continue;
 				auto& chunk_cylinder = map.at(key);
 				if (chunk_cylinder.is_meshed() == false)
@@ -127,6 +130,7 @@ void World::render()
 		}
 		for (auto& chunk : iter->second.get_chunks()) 
 		{
+			//if (App::keyboard.is_key_down(sf::Keyboard::Key::Space)) __debugbreak();
 			chunk.add_data_to_GPU();
 			_chunk_renderer->add_chunk(&chunk);
 		}

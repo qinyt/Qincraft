@@ -17,7 +17,9 @@ class ChunkRenderer;
 
 #define WATER_LEVEL 5
 
-#define RENDER_DISTANCE 1
+#define RENDER_DISTANCE 2
+
+#define DELETE_DISTANCE RENDER_DISTANCE - 1
 
 class World 
 {
