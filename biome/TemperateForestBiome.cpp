@@ -9,7 +9,7 @@ TemperateForestBiome::TemperateForestBiome(int seed)
 
 BlockType TemperateForestBiome::getTopBlock(Rand &rand) const
 {
-    return rand.intInRange(0, 10) < 8 ? BlockType::GRASS : BlockType::MUD;
+    return rand.intInRange(0, 10) < 8 ? BlockType::GRASS : BlockType::TallGrass;
 }
 
 BlockType TemperateForestBiome::getUnderWaterBlock(Rand &rand) const

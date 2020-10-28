@@ -4,6 +4,8 @@
 #include"print_util.h"
 #include"World.h"
 
+#define DEBUG 0
+
 #define DEGREE_TO_RADIAN  3.1415926f/180.0f
 
 Player::Player():
@@ -95,8 +97,31 @@ void Player::handle_input()
 	{
 		_acceleration += _dir_right * _speed;
 	}
+#if DEBUG
+	if (App::keyboard.is_key_down(sf::Keyboard::Key::Enter))
+	{
+		slect_block();
+	}
+#endif
 }
 
-void Player::render() {}
+void Player::render() 
+{
+
+}
 
 void Player::set_y_pos(float y) { _position.y = y; }
+
+void Player::slect_block()
+{
+	auto pos = _position;
+	while (1) 
+	{
+		pos += _dir_forward * 5.0f;
+		auto ty = World::get_block_type(pos.x, pos.y, pos.z);
+		if (ty != BlockType::AIR) __debugbreak();
+	}
+}
+
+
+

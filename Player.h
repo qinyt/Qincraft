@@ -15,6 +15,7 @@ public:
 	inline glm::vec3* get_up_dir() { return &_dir_up; }
 	void set_y_pos(float y);
 private:
+	void slect_block();
 	void handle_input();
 	void handle_mouse();
 	float _speed, _pitch, _head;	

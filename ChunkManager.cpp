@@ -5,6 +5,12 @@
 #include"ChunkManager.h"
 #include"Random.h"
 
+#define DX 7995
+#define DY 71
+#define DZ 8014
+
+
+
 #define ADD_INDICE GLuint index[6]; \
 index[0] = _current_indice + 0; \
 index[1] = _current_indice + 1; \
@@ -67,7 +73,7 @@ void ChunkManager::build_block()
 	int x, y, z;
 	int baseY = (_cur_chunk_cylinder->get_min_height()/ CHUNK_WIDTH_SIZE) * CHUNK_WIDTH_SIZE;
 	int topY  = _cur_chunk_cylinder->get_max_height();
-	for (y = baseY; y < topY; ++y) 
+	for (y = baseY; y < topY + 1; ++y) 
 	{
 		Chunk* chunk = _cur_chunk_cylinder->get_chunk(y);
 		Block* blocks = chunk->get_block_ptr();
@@ -83,11 +89,11 @@ void ChunkManager::build_block()
 			}
 			else if(y == height)
 			{
+				auto t = getBiome(x, z).getTopBlock(r);
 				blocks[idx] = getBiome(x, z).getTopBlock(r);
 			}
-			else if(y > height - 3)
+			else if(y > (height - 3))
 			{
-
 				blocks[idx] = BlockType::MUD;
 			}
 			else 
@@ -152,17 +158,20 @@ void ChunkManager::build_mesh(ChunkCylinder* cy)
 		auto pos = chunk.get_pos();
 		int base = pos.y * CHUNK_WIDTH_SIZE;
 		int delta;
-		if ((base + CHUNK_WIDTH_SIZE) <= max_h) 
+		
+		if ((base + CHUNK_WIDTH_SIZE - 1) <= max_h) 
 		{
-			delta = CHUNK_WIDTH_SIZE;
+			delta = CHUNK_WIDTH_SIZE - 1;
 		}
 		else 
 		{
 			delta = max_h % CHUNK_WIDTH_SIZE;
 		}
+
 		int lz = pos.z * CHUNK_WIDTH_SIZE;
 		int lx = pos.x * CHUNK_WIDTH_SIZE;
-		for (_posY = base; _posY < base + delta; ++_posY)
+		
+		for (_posY = base; _posY <= base + delta; ++_posY)
 		{
 			for (_posZ = lz; _posZ < lz + CHUNK_WIDTH_SIZE; ++_posZ)
 			{
@@ -297,9 +306,7 @@ bool ChunkManager::is_face_buildable(int* dir)
 	math::vec3i_add(pos, dir, pos);
 	
 	BlockType type;
-#if 0
-	type = World::get_block_type(pos[0], pos[1], pos[2]);
-#else
+
 	int a = pos[0] % CHUNK_WIDTH_SIZE;
 	int c = pos[2] % CHUNK_WIDTH_SIZE;
 	bool inside = !(a == 0 || a == CHUNK_WIDTH_SIZE - 1 || c == 0 || c == CHUNK_WIDTH_SIZE - 1);
@@ -314,8 +321,7 @@ bool ChunkManager::is_face_buildable(int* dir)
 	{
 		type = World::get_block_type(pos[0], pos[1], pos[2]);
 	}
-	
-#endif
+
 	if (type != BlockType::AIR)
 	{
 		return false;
@@ -328,6 +334,8 @@ const Biome& ChunkManager::getBiome(int x, int z) const
 {
 	int biomeValue = current_biome_map[x + CHUNK_WIDTH_SIZE * z];
 	
+	return m_grassBiome;
+
 	if (biomeValue > 160) {
 		return m_oceanBiome;
 	}
