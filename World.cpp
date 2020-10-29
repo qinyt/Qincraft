@@ -17,50 +17,44 @@ std::unordered_map<math::VectorXZ_t, ChunkCylinder> World::map;
 #define UNLOCK 
 #endif
 
+#define RENDER_LIMITE 6
+
+
 World::World() :
+	_render_distance(2),
+	_chunk_renderer(),
 	_chunk_building_thd([&]()
 {
 	int posX, posZ;
-	while (1) 
+	while (App::is_running) 
 	{
 		posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
 		posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
 		LOCK;
-		for(int i = -RENDER_DISTANCE; i < RENDER_DISTANCE+1; ++i)
-			for (int j = -RENDER_DISTANCE; j < RENDER_DISTANCE+1; ++j)
-			{
-				int x = posX + j;
-				int z = posZ + i;
-				if (!is_chunk_cylinder_exist(x, z)) 
-				{
-					//TODO: async the process
-					ChunkCylinder chunk_cylinder(x, z);
-					push_chunk(chunk_cylinder);
-				}
-			}
-
 		// must add chunk first, THEN mesh. Otherwise, the meshing process is wrong.
-		for (int i = -DELETE_DISTANCE; i < DELETE_DISTANCE; ++i)
-			for (int j = -DELETE_DISTANCE; j < DELETE_DISTANCE; ++j)
+		for (int i = -_render_distance; i < _render_distance; ++i)
+			for (int j = -_render_distance; j < _render_distance; ++j)
 			{
 				int x = posX + j;
 				int z = posZ + i;
 				math::VectorXZ_t key = { x, z };
-				if (map.find(key) == map.end()) continue;
+				if (map.find(key) == map.end()) 
+				{
+					ChunkCylinder chunk_cylinder(x, z);
+					push_chunk(chunk_cylinder);
+				};
 				auto& chunk_cylinder = map.at(key);
 				if (chunk_cylinder.is_meshed() == false)
 				{
 					chunk_cylinder.mesh();
 				}
 			}
-		//printf("map size: %d\n", map.size());
+		if (++_render_distance == RENDER_LIMITE) _render_distance = 2;
 		UNLOCK;
 		sleep_millisecons(10);
 	}
 })
-{
-
-}
+{}
 
 World::~World() 
 {
@@ -118,9 +112,13 @@ void World::render()
 	for (auto iter = map.begin(); iter != map.end();)
 	{
 		auto& pos = iter->first;
-		GLint dx = posX - pos.x;
-		GLint dz = posZ - pos.z;
-		if ((dx * dx + dz * dz) > 2*RENDER_DISTANCE* RENDER_DISTANCE)
+		int min_x = posX - RENDER_LIMITE;
+		int min_z = posZ - RENDER_LIMITE;
+		int max_x = posX + RENDER_LIMITE;
+		int max_z = posZ + RENDER_LIMITE;
+
+		bool out = (pos.x < min_x || pos.z < min_z || pos.x > max_x || pos.z > max_z);
+		if(out)
 		{
 			for(auto& chunk: iter->second.get_chunks()) 
 				chunk.get_model()->clear_data();
@@ -136,4 +134,14 @@ void World::render()
 		++iter;
 	}
 	UNLOCK;
+}
+
+void World::load_chunk(int x, int z) 
+{
+	if (!is_chunk_cylinder_exist(x, z))
+	{
+		//TODO: async the process
+		ChunkCylinder chunk_cylinder(x, z);
+		push_chunk(chunk_cylinder);
+	}
 }

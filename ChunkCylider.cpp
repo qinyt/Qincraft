@@ -1,4 +1,6 @@
 #include"ChunkCylinder.h"
+#include"World.h"
+
 
 static ChunkManager chunk_manager;
 
@@ -54,6 +56,14 @@ bool ChunkCylinder::is_meshed()
 
 void ChunkCylinder::mesh() 
 {
+	for (int z = _pos.z - 1; z <= _pos.z + 1; ++z) 
+	{
+		for (int x = _pos.x - 1; x <= _pos.x + 1; ++x) 
+		{
+			if (!World::is_chunk_cylinder_exist(x, z))
+				World::load_chunk(x, z);
+		}
+	}
 	chunk_manager.build_mesh(this);
 	_meshed = true;
 }

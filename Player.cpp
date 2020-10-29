@@ -9,7 +9,7 @@
 #define DEGREE_TO_RADIAN  3.1415926f/180.0f
 
 Player::Player():
-	_speed(0.005f),
+	_speed(0.025f),
 	_head(0.0f * DEGREE_TO_RADIAN),
 	_pitch(80.0f)
 {

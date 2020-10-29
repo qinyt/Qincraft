@@ -29,7 +29,6 @@ void ChunkRenderer::add_chunk(Chunk* chunk)
 void ChunkRenderer::render(Camera* camera) 
 {	
 	if (_models.empty()) return;
-	//printf("model stack size:%d\n", _models.size());
 
 	_shader.bind();
 	_shader.set_model_view_mat(*camera->get_model_view_mat());
@@ -42,5 +41,4 @@ void ChunkRenderer::render(Camera* camera)
 		glDrawElements(GL_TRIANGLES, model->indices_count, GL_UNSIGNED_INT, nullptr);
 	}
 	_models.clear();
-	//World::get_map()->clear();
 }

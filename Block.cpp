@@ -21,7 +21,8 @@ void BlockManager::init_block_tex_pos()
 	block_tex_pos[BlockType::ROCK] = { 3, 0 };
 	block_tex_pos[BlockType::MUD] = { 4, 0 };
 	block_tex_pos[BlockType::SAND] = { 7, 0 }; 
-	block_tex_pos[BlockType::TallGrass] = { 6, 0 };
+	block_tex_pos[BlockType::TallGrass] = { 6, 0 }; 
+	block_tex_pos[BlockType::WATER] = { 8, 0 };
 
 }
 
@@ -33,6 +34,8 @@ void BlockManager::init_block_tex_coord()
 	block_tex_coord[BlockType::ROCK] = calc_tex_coord(BlockType::ROCK);
 	block_tex_coord[BlockType::MUD] = calc_tex_coord(BlockType::MUD);
 	block_tex_coord[BlockType::SAND] = calc_tex_coord(BlockType::SAND);
+	block_tex_coord[BlockType::WATER] = calc_tex_coord(BlockType::WATER);
+	block_tex_coord[BlockType::TallGrass] = calc_tex_coord(BlockType::TallGrass);
 
 	delete[] block_tex_pos;
 }

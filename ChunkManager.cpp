@@ -10,7 +10,6 @@
 #define DZ 8014
 
 
-
 #define ADD_INDICE GLuint index[6]; \
 index[0] = _current_indice + 0; \
 index[1] = _current_indice + 1; \
@@ -71,7 +70,7 @@ void ChunkManager::build_block()
 {
 	Rand r;
 	int x, y, z;
-	int baseY = (_cur_chunk_cylinder->get_min_height()/ CHUNK_WIDTH_SIZE) * CHUNK_WIDTH_SIZE;
+	int baseY = (_cur_chunk_cylinder->get_min_height() / CHUNK_WIDTH_SIZE) * CHUNK_WIDTH_SIZE;
 	int topY  = _cur_chunk_cylinder->get_max_height();
 	for (y = baseY; y < topY + 1; ++y) 
 	{
@@ -113,7 +112,7 @@ void ChunkManager::build_biome_map()
 	for (j = 0; j < CHUNK_WIDTH_SIZE; ++j)
 	for (i = 0; i < CHUNK_WIDTH_SIZE; ++i)
 	{
-		map[i + CHUNK_WIDTH_SIZE * j] = (int) (noiser.getHeight(i, j, x, z));
+		map[i + CHUNK_WIDTH_SIZE * j] = static_cast<int>(noiser.getHeight(i, j, x+10, z+10));
 	}
 }
 
@@ -303,12 +302,12 @@ void ChunkManager::try_build_right_face()
 bool ChunkManager::is_face_buildable(int* dir)
 {
 	int pos[3] = { _posX, _posY, _posZ };
-	math::vec3i_add(pos, dir, pos);
-	
+	math::vec3i_add(pos, dir, pos);	
 	BlockType type;
 
 	int a = pos[0] % CHUNK_WIDTH_SIZE;
 	int c = pos[2] % CHUNK_WIDTH_SIZE;
+
 	bool inside = !(a == 0 || a == CHUNK_WIDTH_SIZE - 1 || c == 0 || c == CHUNK_WIDTH_SIZE - 1);
 	if(inside)
 	{
@@ -334,7 +333,7 @@ const Biome& ChunkManager::getBiome(int x, int z) const
 {
 	int biomeValue = current_biome_map[x + CHUNK_WIDTH_SIZE * z];
 	
-	return m_grassBiome;
+	//return m_grassBiome;
 
 	if (biomeValue > 160) {
 		return m_oceanBiome;

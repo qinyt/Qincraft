@@ -9,7 +9,7 @@ OceanBiome::OceanBiome(int seed)
 
 BlockType OceanBiome::getTopBlock(Rand &rand) const
 {
-    return BlockType::GRASS;
+    return BlockType::WATER;
 }
 
 BlockType OceanBiome::getUnderWaterBlock(Rand &rand) const

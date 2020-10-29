@@ -25,4 +25,5 @@ private:
 public:
 	static Keyboard keyboard;
 	static sf::Window window;
+	static bool is_running;
 };

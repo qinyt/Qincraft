@@ -3,6 +3,7 @@
 
 Keyboard App::keyboard;
 sf::Window App::window;
+bool App::is_running = true;
 
 App::App() 
 {
@@ -44,7 +45,7 @@ void App::init_win()
     settings.depthBits = 24;
     settings.stencilBits = 8;
     sf::VideoMode winMode(WIN_WIDTH, WIN_HEIGHT);
-    window.create(winMode, "Qin's Minecraft", sf::Style::Default, settings);
+    window.create(winMode, "Qin's Minecraft", sf::Style::Fullscreen, settings);
 }
 
 void App::poll_event() 
@@ -58,7 +59,7 @@ void App::poll_event()
 static GLuint frames = 0;
 void App::loop() 
 {    
-    while (1) 
+    while (is_running) 
     {
         if (_timer.time_passed_milli() > 1000.0) 
         {
@@ -72,7 +73,7 @@ void App::loop()
         if (App::keyboard.is_key_down(sf::Keyboard::Key::Escape)) 
         {
             printf("ESC pressed\n");
-            exit(0);
+            is_running = false;
         }
 
         _game->update();
