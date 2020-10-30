@@ -4,11 +4,9 @@
 #include<memory>
 #include"ChunkManager.h"
 #include"Random.h"
+#include"GeneralMaths.h"
 
-#define DX 7995
-#define DY 71
-#define DZ 8014
-
+#define  WATER_LEVEL 64;
 
 #define ADD_INDICE GLuint index[6]; \
 index[0] = _current_indice + 0; \
@@ -23,7 +21,7 @@ _current_indice += 4
 const int seed = RandomSingleton::get().intInRange(424, 325322);
 
 static int current_height_map[CHUNK_LAYER_SIZE];
-static int current_biome_map[CHUNK_LAYER_SIZE];
+static int current_biome_map[(CHUNK_WIDTH_SIZE+1)* (CHUNK_WIDTH_SIZE + 1)];
 static int cur_max_height, cur_min_height;
 
 static Adjacency_t adj;
@@ -109,8 +107,8 @@ void ChunkManager::build_biome_map()
 	int i, j;
 	int x = _cur_chunk_cylinder->get_pos().x;
 	int z = _cur_chunk_cylinder->get_pos().z;
-	for (j = 0; j < CHUNK_WIDTH_SIZE; ++j)
-	for (i = 0; i < CHUNK_WIDTH_SIZE; ++i)
+	for (j = 0; j < CHUNK_WIDTH_SIZE+1; ++j)
+	for (i = 0; i < CHUNK_WIDTH_SIZE+1; ++i)
 	{
 		map[i + CHUNK_WIDTH_SIZE * j] = static_cast<int>(noiser.getHeight(i, j, x+10, z+10));
 	}
@@ -130,17 +128,41 @@ void ChunkManager::get_max_min_height()
 
 void ChunkManager::build_height_map()
 {
-	int* map = current_height_map;
-	int i, j;
-	int x = _cur_chunk_cylinder->get_pos().x;
-	int z = _cur_chunk_cylinder->get_pos().z;
-	for (j = 0; j < CHUNK_WIDTH_SIZE; ++j)
-		for (i = 0; i < CHUNK_WIDTH_SIZE; ++i)
+	auto pos = _cur_chunk_cylinder->get_pos();
+
+	auto getHeightAt = [&](int x, int z) {
+		const Biome& biome = getBiome(x, z);
+
+		return biome.getHeight(x, z, pos.x, pos.z);
+	};
+
+	auto build = [&](int ix, int iz, int width, int height)
+	{
+		float h0 = static_cast<float>(getHeightAt(ix, iz));
+		float h1 = static_cast<float>(getHeightAt(ix, height));
+		float h2 = static_cast<float>(getHeightAt(width, iz));
+		float h3 = static_cast<float>(getHeightAt(width, height));
+
+		for (int z = iz; z < height; ++z)
 		{
-			//TODO: use interpolation to optimize
-			int h = (getBiome(i, j).getHeight(i, j, x, z));
-			map[i + CHUNK_WIDTH_SIZE * j] = h;
+			for (int x = ix; x < width; ++x)
+			{
+				if (x == CHUNK_WIDTH_SIZE) continue;
+				if (z == CHUNK_WIDTH_SIZE) continue;
+				current_height_map[x + CHUNK_WIDTH_SIZE * z] = smoothInterpolation(
+					h0, h1, h2, h3,
+					static_cast<float>(ix), static_cast<float>(width),
+					static_cast<float>(iz), static_cast<float>(height),
+					static_cast<float>(x), static_cast<float>(z));
+			}
 		}
+	};
+
+	int half = CHUNK_WIDTH_SIZE/2;
+	build(0,		0,			half,				half);
+	build(half,		0,			CHUNK_WIDTH_SIZE,	half);
+	build(0,		half,		half,				CHUNK_WIDTH_SIZE);
+	build(half,		half,		CHUNK_WIDTH_SIZE,	CHUNK_WIDTH_SIZE);
 }
 
 void ChunkManager::build_mesh(ChunkCylinder* cy)

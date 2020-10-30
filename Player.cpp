@@ -4,7 +4,7 @@
 #include"print_util.h"
 #include"World.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 #define DEGREE_TO_RADIAN  3.1415926f/180.0f
 
@@ -100,7 +100,7 @@ void Player::handle_input()
 #if DEBUG
 	if (App::keyboard.is_key_down(sf::Keyboard::Key::Enter))
 	{
-		slect_block();
+		__debugbreak();
 	}
 #endif
 }
@@ -119,7 +119,7 @@ void Player::slect_block()
 	{
 		pos += _dir_forward * 5.0f;
 		auto ty = World::get_block_type(pos.x, pos.y, pos.z);
-		if (ty != BlockType::AIR) __debugbreak();
+		if (ty != BlockType::AIR) __debugbreak();				
 	}
 }
 

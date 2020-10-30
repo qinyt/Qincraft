@@ -45,7 +45,7 @@ void App::init_win()
     settings.depthBits = 24;
     settings.stencilBits = 8;
     sf::VideoMode winMode(WIN_WIDTH, WIN_HEIGHT);
-    window.create(winMode, "Qin's Minecraft", sf::Style::Fullscreen, settings);
+    window.create(winMode, "Qin's Minecraft", sf::Style::Default, settings);
 }
 
 void App::poll_event() 

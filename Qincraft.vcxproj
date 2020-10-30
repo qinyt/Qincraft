@@ -165,6 +165,7 @@
     <ClCompile Include="ChunkRenderer.cpp" />
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GeneralMaths.cpp" />
     <ClCompile Include="glad\glad.c" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="ChunkCylinder.h" />
     <ClInclude Include="ChunkManager.h" />
     <ClInclude Include="ChunkRenderer.h" />
+    <ClInclude Include="GeneralMaths.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Block.h" />

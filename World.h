@@ -9,15 +9,13 @@
 
 class ChunkRenderer;
 
-#define CHUNK_CENTER_X 801
-#define CHUNK_CENTER_Z 801
+#define CHUNK_CENTER_X 1022
+#define CHUNK_CENTER_Z 1039
 #define PLAYER_SPAWN_X(x) (x+CHUNK_CENTER_X) * CHUNK_WIDTH_SIZE
-#define PLAYER_SPAWN_Y(y) y + CHUNK_WIDTH_SIZE
+#define PLAYER_SPAWN_Y(y)  y + CHUNK_WIDTH_SIZE
 #define PLAYER_SPAWN_Z(z) (z+CHUNK_CENTER_Z) * CHUNK_WIDTH_SIZE
 
 #define WATER_LEVEL 5
-
-
 
 class World 
 {
