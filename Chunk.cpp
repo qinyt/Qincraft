@@ -20,7 +20,7 @@ Chunk::Chunk(int posX, int posY, int posZ) :
 	_aabb.update({ 
 		static_cast<float>(posX * CHUNK_WIDTH_SIZE), 
 		static_cast<float>(posY * CHUNK_WIDTH_SIZE),
-		static_cast<float>(posY * CHUNK_WIDTH_SIZE)});
+		static_cast<float>(posZ * CHUNK_WIDTH_SIZE)});
 }
 
 Chunk::~Chunk() 

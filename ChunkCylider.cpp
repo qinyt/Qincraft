@@ -6,7 +6,6 @@ static ChunkManager chunk_manager;
 
 ChunkCylinder::ChunkCylinder(int x, int z)
 	:_pos({ x, z })
-	,_meshed(false)
 {
 	build_blocks();
 }
@@ -51,24 +50,17 @@ void ChunkCylinder::add_chunk(int x, int y, int z)
 }
 
 
-bool ChunkCylinder::is_meshed() 
-{
-	return _meshed;
-}
-
 void ChunkCylinder::mesh(Camera* camera)
 {
-	if (_meshed) return;
 	for (int z = _pos.z - 1; z <= _pos.z + 1; ++z) 
 	{
 		for (int x = _pos.x - 1; x <= _pos.x + 1; ++x) 
 		{
-			if (!World::is_chunk_cylinder_exist(x, z))
-				World::load_chunk(x, z);
+			//if (!World::is_chunk_cylinder_exist(x, z))
+			World::load_chunk(x, z);
 		}
 	}
 	chunk_manager.build_mesh(this, camera);
-	_meshed = true;
 }
 
 BlockType ChunkCylinder::get_block_within(int x, int y, int z)

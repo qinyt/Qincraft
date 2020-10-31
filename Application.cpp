@@ -8,8 +8,6 @@ bool App::is_running = true;
 #if SHOW_TRI_COUNT
 int App::tri_count = 0;
 #endif
-
-
 App::App()
 {
     
@@ -50,7 +48,7 @@ void App::init_win()
     settings.depthBits = 24;
     settings.stencilBits = 8;
     sf::VideoMode winMode(WIN_WIDTH, WIN_HEIGHT);
-    window.create(winMode, "Qin's Minecraft", sf::Style::Default, settings);
+    window.create(winMode, "Qin's Minecraft", sf::Style::Fullscreen, settings);
 }
 
 void App::poll_event() 

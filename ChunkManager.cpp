@@ -172,8 +172,15 @@ void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)
 	int max_h = _cur_chunk_cylinder->get_max_height();
 	for (auto& chunk : _cur_chunk_cylinder->get_chunks())
 	{
+		//QUESTION: why commenting it out actually gains speed ?
 		if (!camera->get_view_frustum()->isBoxInFrustum(chunk.get_aabb())) 
+		{
+			chunk.set_mesh_flag(false);
 			continue;
+		}
+
+		if (chunk.is_meshed() == true) continue;
+		
 		//chunk.clear_mesh();
 		_current_indice = 0;
 		_mesh = chunk.get_mesh();
@@ -215,6 +222,7 @@ void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)
 				}
 			}
 		}
+		chunk.set_mesh_flag(true);
 	}
 }
 

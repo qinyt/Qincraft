@@ -29,5 +29,4 @@ private:
 	math::VectorXZ_t _pos;
 	int _max_height;
 	int _min_height;
-	bool _meshed;
 };

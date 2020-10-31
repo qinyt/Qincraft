@@ -25,6 +25,8 @@ public:
 	void add_data_to_GPU();
 	Model* get_model();
 	const AABB& get_aabb();
+	inline bool is_meshed() { return _is_meshed; }
+	inline void set_mesh_flag(bool is_meshed) { _is_meshed = is_meshed; }
 private:
 	sf::Vector3i _world_pos;
 	Mesh_t _mesh;

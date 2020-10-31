@@ -48,10 +48,7 @@ World::World(Camera* camera) :
 					push_chunk(chunk_cylinder);
 				};
 				auto& chunk_cylinder = map.at(key);
-				if (chunk_cylinder.is_meshed() == false)
-				{
-					chunk_cylinder.mesh(cam);
-				}
+				chunk_cylinder.mesh(cam);
 			}
 		}
 		UNLOCK;
@@ -131,11 +128,11 @@ void World::render(Camera* camera)
 		}
 		for (auto& chunk : iter->second.get_chunks()) 
 		{
-			/*if(!camera->get_view_frustum()->isBoxInFrustum(chunk.get_aabb()))
-				continue;*/
+			if(!camera->get_view_frustum()->isBoxInFrustum(chunk.get_aabb()))
+				continue;
 			chunk.add_data_to_GPU();
-			if (chunk.get_model()->get_render_info()->indices_count != 0)
-			_chunk_renderer->add_chunk(&chunk);
+			if (chunk.get_model()->get_render_info()->indices_count != 0) 
+				_chunk_renderer->add_chunk(&chunk);
 		}
 		++iter;
 	}
