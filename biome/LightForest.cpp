@@ -9,7 +9,8 @@ LightForest::LightForest(int seed)
 
 BlockType LightForest::getTopBlock(Rand &rand) const
 {
-    return BlockType::TallGrass;
+    //return BlockType::TallGrass;
+    return rand.intInRange(0, 10) > 8 ? BlockType::MUD : BlockType::TallGrass;
 }
 
 BlockType LightForest::getUnderWaterBlock(Rand &rand) const
