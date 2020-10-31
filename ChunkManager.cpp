@@ -60,7 +60,7 @@ void ChunkManager::build_cylinder(ChunkCylinder* cy)
 	get_max_min_height();
 	_cur_chunk_cylinder->set_max_height(cur_max_height);
 	_cur_chunk_cylinder->set_min_height(cur_min_height);
-	_cur_chunk_cylinder->add_chunk();
+	//_cur_chunk_cylinder->add_chunk();
 	build_block();
 }
 
@@ -68,9 +68,10 @@ void ChunkManager::build_block()
 {
 	Rand r;
 	int x, y, z;
-	int baseY = (_cur_chunk_cylinder->get_min_height() / CHUNK_WIDTH_SIZE) * CHUNK_WIDTH_SIZE;
+	//int baseY = (_cur_chunk_cylinder->get_min_height() / CHUNK_WIDTH_SIZE) * CHUNK_WIDTH_SIZE;
 	int topY  = _cur_chunk_cylinder->get_max_height();
-	for (y = baseY; y < topY + 1; ++y) 
+	auto pos = _cur_chunk_cylinder->get_pos();
+	for (y = 0; y < topY + 1; ++y) 
 	{
 		Chunk* chunk = _cur_chunk_cylinder->get_chunk(y);
 		Block* blocks = chunk->get_block_ptr();
@@ -165,13 +166,15 @@ void ChunkManager::build_height_map()
 	build(half,		half,		CHUNK_WIDTH_SIZE,	CHUNK_WIDTH_SIZE);
 }
 
-void ChunkManager::build_mesh(ChunkCylinder* cy)
+void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)
 {
 	_cur_chunk_cylinder = cy;
 	int max_h = _cur_chunk_cylinder->get_max_height();
 	for (auto& chunk : _cur_chunk_cylinder->get_chunks())
 	{
-		chunk.clear_mesh();
+		if (!camera->get_view_frustum()->isBoxInFrustum(chunk.get_aabb())) 
+			continue;
+		//chunk.clear_mesh();
 		_current_indice = 0;
 		_mesh = chunk.get_mesh();
 		Block* blocks = chunk.get_block_ptr();

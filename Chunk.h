@@ -4,6 +4,7 @@
 #include"Block.h"
 #include"Math.h"
 #include"ChunkManager.h"
+#include"AABB.h"
 #include<SFML\Graphics.hpp>
 
 #define CHUNK_WIDTH_SIZE	16
@@ -23,12 +24,14 @@ public:
 	void clear_mesh();
 	void add_data_to_GPU();
 	Model* get_model();
+	const AABB& get_aabb();
 private:
 	sf::Vector3i _world_pos;
 	Mesh_t _mesh;
 	Model _model;
 	Block _blocks[CHUNK_VOLUME];
 	bool _is_meshed;
+	AABB _aabb;
 };
 
 

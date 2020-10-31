@@ -3,9 +3,13 @@
 
 Player Game::player;
 
-Game::Game() 
+Game::Game():
+	_camera(),
+	_chunk_renderer(&_camera),
+	_world(&_camera)
 {
 	_camera.hook_entity(&player);
+	_camera.update(); // to initalize the frustrum
 	_world.set_chunk_renderer(&_chunk_renderer);
 }
 
@@ -25,7 +29,7 @@ void Game::render()
 {
 	glClearColor(0.8f, 0.7f, 0.8f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	_world.render();
+	_world.render(&_camera);
 	//_simpleRenderer.render(&_camera);
 	_chunk_renderer.render(&_camera);
 	_sky_renderer.render(&_camera);

@@ -2,6 +2,7 @@
 
 #include<vector>
 #include"Chunk.h"
+#include"Camera.h"
 
 class ChunkCylinder 
 {
@@ -16,7 +17,7 @@ public:
 	inline math::VectorXZ_t& get_pos() { return _pos; }
 	std::vector<Chunk>& get_chunks() { return _chunks; }
 	bool is_meshed();
-	void mesh();
+	void mesh(Camera* camera);
 	inline void set_max_height(int h) { _max_height = h; }
 	inline void set_min_height(int h) { _min_height = h; }
 	int get_max_height() { return _max_height; }

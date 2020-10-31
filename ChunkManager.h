@@ -11,6 +11,8 @@
 #include"biome\OceanBiome.h"
 #include"biome\TemperateForestBiome.h"
 
+#include"Camera.h"
+
 typedef struct Adjacency
 {
 	GLint up[3] = { 0,  1,  0 };
@@ -29,7 +31,7 @@ class ChunkManager
 public:
 	ChunkManager();
 	~ChunkManager();
-	void build_mesh(ChunkCylinder* cy);
+	void build_mesh(ChunkCylinder* cy, Camera* camera);
 	void build_cylinder(ChunkCylinder* cy);
 private:
 	void setup_noise();

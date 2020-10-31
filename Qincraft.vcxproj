@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AABB.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="biome\Biome.cpp" />
     <ClCompile Include="biome\DesertBiome.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="ChunkManager.cpp" />
     <ClCompile Include="ChunkRenderer.cpp" />
     <ClCompile Include="FileUtil.cpp" />
+    <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GeneralMaths.cpp" />
     <ClCompile Include="glad\glad.c" />
@@ -187,6 +189,7 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="biome\Biome.h" />
     <ClInclude Include="biome\DesertBiome.h" />
     <ClInclude Include="biome\GrasslandBiome.h" />
@@ -196,6 +199,7 @@
     <ClInclude Include="ChunkCylinder.h" />
     <ClInclude Include="ChunkManager.h" />
     <ClInclude Include="ChunkRenderer.h" />
+    <ClInclude Include="Frustum.h" />
     <ClInclude Include="GeneralMaths.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Application.h" />

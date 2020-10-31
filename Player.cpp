@@ -4,7 +4,7 @@
 #include"print_util.h"
 #include"World.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 #define DEGREE_TO_RADIAN  3.1415926f/180.0f
 
@@ -100,6 +100,7 @@ void Player::handle_input()
 #if DEBUG
 	if (App::keyboard.is_key_down(sf::Keyboard::Key::Enter))
 	{
+		printf("position:%f, %f, %f\n",_position.x, _position.y, _position.z);
 		__debugbreak();
 	}
 #endif

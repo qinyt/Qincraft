@@ -15,8 +15,8 @@ public:
 	void render();
 	static Player	player;
 private:
-	World	_world;
 	Camera _camera;
+	World	_world;
 	SkyRenderer		_sky_renderer;
 	SimpleRenderer	_simpleRenderer;
 	ChunkRenderer   _chunk_renderer;

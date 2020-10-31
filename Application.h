@@ -9,6 +9,8 @@
 #define WIN_WIDTH	1500
 #define WIN_HEIGHT	1000
 
+#define SHOW_TRI_COUNT 0
+
 class App 
 {
 public:
@@ -26,4 +28,7 @@ public:
 	static Keyboard keyboard;
 	static sf::Window window;
 	static bool is_running;
+#if SHOW_TRI_COUNT 
+	static int tri_count;
+#endif
 };

@@ -23,7 +23,9 @@ Chunk* ChunkCylinder::get_chunk(int y)
 	{
 		if (chunk.get_pos().y == py) return &chunk;
 	}
-	return 0;
+	Chunk chunk(_pos.x, py, _pos.z);
+	_chunks.emplace_back(chunk);
+	return &_chunks.back();
 }
 
 void ChunkCylinder::add_chunk() 
@@ -54,8 +56,9 @@ bool ChunkCylinder::is_meshed()
 	return _meshed;
 }
 
-void ChunkCylinder::mesh() 
+void ChunkCylinder::mesh(Camera* camera)
 {
+	if (_meshed) return;
 	for (int z = _pos.z - 1; z <= _pos.z + 1; ++z) 
 	{
 		for (int x = _pos.x - 1; x <= _pos.x + 1; ++x) 
@@ -64,7 +67,7 @@ void ChunkCylinder::mesh()
 				World::load_chunk(x, z);
 		}
 	}
-	chunk_manager.build_mesh(this);
+	chunk_manager.build_mesh(this, camera);
 	_meshed = true;
 }
 

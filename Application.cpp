@@ -5,7 +5,12 @@ Keyboard App::keyboard;
 sf::Window App::window;
 bool App::is_running = true;
 
-App::App() 
+#if SHOW_TRI_COUNT
+int App::tri_count = 0;
+#endif
+
+
+App::App()
 {
     
 }
@@ -56,6 +61,7 @@ void App::poll_event()
         if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Escape)  window.close();
     }
 }
+
 static GLuint frames = 0;
 void App::loop() 
 {    
@@ -64,7 +70,11 @@ void App::loop()
         if (_timer.time_passed_milli() > 1000.0) 
         {
             _timer.reset();
+#if SHOW_TRI_COUNT
+            printf("fps: %d , triangles: %d\n", frames, tri_count);
+#else
             printf("fps: %d\n", frames);
+#endif
             frames = 0;
         }
         ++frames;
@@ -75,7 +85,6 @@ void App::loop()
             printf("ESC pressed\n");
             is_running = false;
         }
-
         _game->update();
         _game->render();
                       

@@ -20,19 +20,23 @@ std::unordered_map<math::VectorXZ_t, ChunkCylinder> World::map;
 #define RENDER_LIMITE 6
 
 
-World::World() :
+World::World(Camera* camera) :
 	_render_distance(2),
 	_chunk_renderer(),
 	_chunk_building_thd([&]()
 {
 	int posX, posZ;
+	Camera* cam = camera;
 	while (App::is_running) 
 	{
+		sleep_millisecons(20);
+		
 		posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
 		posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
 		LOCK;
 		// must add chunk first, THEN mesh. Otherwise, the meshing process is wrong.
-		for (int i = -_render_distance; i < _render_distance; ++i)
+		for (int i = -_render_distance; i < _render_distance; ++i) 
+		{
 			for (int j = -_render_distance; j < _render_distance; ++j)
 			{
 				int x = posX + j;
@@ -46,12 +50,12 @@ World::World() :
 				auto& chunk_cylinder = map.at(key);
 				if (chunk_cylinder.is_meshed() == false)
 				{
-					chunk_cylinder.mesh();
+					chunk_cylinder.mesh(cam);
 				}
 			}
-		if (++_render_distance == RENDER_LIMITE) _render_distance = 2;
+		}
 		UNLOCK;
-		sleep_millisecons(10);
+		if (++_render_distance == RENDER_LIMITE) _render_distance = 2;
 	}
 })
 {}
@@ -104,7 +108,7 @@ void World::update()
 
 }
 
-void World::render() 
+void World::render(Camera* camera)
 {
 	int posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
 	int posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
@@ -127,8 +131,10 @@ void World::render()
 		}
 		for (auto& chunk : iter->second.get_chunks()) 
 		{
-			//if (App::keyboard.is_key_down(sf::Keyboard::Key::Space)) __debugbreak();
+			/*if(!camera->get_view_frustum()->isBoxInFrustum(chunk.get_aabb()))
+				continue;*/
 			chunk.add_data_to_GPU();
+			if (chunk.get_model()->get_render_info()->indices_count != 0)
 			_chunk_renderer->add_chunk(&chunk);
 		}
 		++iter;
