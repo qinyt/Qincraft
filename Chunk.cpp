@@ -61,7 +61,7 @@ void Chunk::add_data_to_GPU()
 	_meshes.add_to_model();
 }
 
-Meshes_t* Chunk::get_mesh() 
+Meshes_t* Chunk::get_meshes() 
 {
 	return &_meshes;
 }

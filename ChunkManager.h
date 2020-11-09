@@ -38,7 +38,7 @@ private:
 	void build_block();
 	void build_biome_map();
 	void build_height_map();
-	void get_max_min_height();
+	void get_max_height();
 	bool is_face_buildable(int* dir);
 	void try_build_front_face();
 	void try_build_back_face();

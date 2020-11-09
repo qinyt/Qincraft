@@ -179,13 +179,14 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
-    <ClCompile Include="SimpleRenderer.cpp" />
-    <ClCompile Include="SimpleShader.cpp" />
+    <ClCompile Include="ChunkShader.cpp" />
     <ClCompile Include="SkyRenderer.cpp" />
     <ClCompile Include="SkyShader.cpp" />
     <ClCompile Include="SkyTexture.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="WaterRenderer.cpp" />
+    <ClCompile Include="WaterShader.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -221,14 +222,15 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLoader.h" />
-    <ClInclude Include="SimpleRenderer.h" />
-    <ClInclude Include="SimpleShader.h" />
+    <ClInclude Include="ChunkShader.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SkyRenderer.h" />
     <ClInclude Include="SkyShader.h" />
     <ClInclude Include="SkyTexture.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="WaterRenderer.h" />
+    <ClInclude Include="WaterShader.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

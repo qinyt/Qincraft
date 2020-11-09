@@ -22,7 +22,7 @@ const int seed = RandomSingleton::get().intInRange(424, 325322);
 
 static int current_height_map[CHUNK_LAYER_SIZE];
 static int current_biome_map[(CHUNK_WIDTH_SIZE+1)* (CHUNK_WIDTH_SIZE + 1)];
-static int cur_max_height, cur_min_height;
+static int cur_max_height;
 
 static Adjacency_t adj;
 
@@ -57,10 +57,8 @@ void ChunkManager::build_cylinder(ChunkCylinder* cy)
 	_cur_chunk_cylinder = cy;
 	build_biome_map();
 	build_height_map();
-	get_max_min_height();
+	get_max_height();
 	_cur_chunk_cylinder->set_max_height(cur_max_height);
-	_cur_chunk_cylinder->set_min_height(cur_min_height);
-	//_cur_chunk_cylinder->add_chunk();
 	build_block();
 }
 
@@ -68,7 +66,6 @@ void ChunkManager::build_block()
 {
 	Rand r;
 	int x, y, z;
-	//int baseY = (_cur_chunk_cylinder->get_min_height() / CHUNK_WIDTH_SIZE) * CHUNK_WIDTH_SIZE;
 	int topY  = _cur_chunk_cylinder->get_max_height();
 	auto pos = _cur_chunk_cylinder->get_pos();
 	for (y = 0; y < topY + 1; ++y) 
@@ -115,15 +112,13 @@ void ChunkManager::build_biome_map()
 	}
 }
 
-void ChunkManager::get_max_min_height()
+void ChunkManager::get_max_height()
 {
 	int* map = current_height_map;
 	cur_max_height = 0;
-	cur_min_height = 99999;
 	for (int i = 0; i < CHUNK_WIDTH_SIZE * CHUNK_WIDTH_SIZE; ++i) 
 	{
 		if (map[i] > cur_max_height) cur_max_height = map[i];
-		if (map[i] < cur_min_height) cur_min_height = map[i];
 	}
 }
 
@@ -172,7 +167,6 @@ void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)
 	int max_h = _cur_chunk_cylinder->get_max_height();
 	for (auto& chunk : _cur_chunk_cylinder->get_chunks())
 	{
-		//QUESTION: why commenting it out actually gains speed ?
 		if (!camera->get_view_frustum()->isBoxInFrustum(chunk.get_aabb())) 
 		{
 			chunk.set_mesh_flag(false);
@@ -181,9 +175,7 @@ void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)
 
 		if (chunk.is_meshed() == true) continue;
 		
-		//chunk.clear_mesh();
 		_current_indice = 0;
-		_mesh = &chunk.get_mesh()->solid;
 		Block* blocks = chunk.get_block_ptr();
 
 		auto pos = chunk.get_pos();
@@ -201,7 +193,8 @@ void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)
 
 		int lz = pos.z * CHUNK_WIDTH_SIZE;
 		int lx = pos.x * CHUNK_WIDTH_SIZE;
-		
+
+		//auto* meshes = chunk.get_meshes();
 		for (_posY = base; _posY <= base + delta; ++_posY)
 		{
 			for (_posZ = lz; _posZ < lz + CHUNK_WIDTH_SIZE; ++_posZ)
@@ -213,6 +206,7 @@ void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)
 					int iy = _posY - base;
 					auto block_type = blocks[iy * CHUNK_LAYER_SIZE + iz * CHUNK_WIDTH_SIZE + ix].get_type();
 					if (block_type == BlockType::AIR) continue;
+					_mesh = chunk.get_mesh(block_type);
 					_coord = Block::block_manager.get_tex_coord(block_type);
 					try_build_front_face();
 					try_build_back_face();

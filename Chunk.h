@@ -22,7 +22,7 @@ public:
 	inline Block* get_block_ptr()  { return _blocks; }
 	void clear_mesh();
 	void add_data_to_GPU();
-	Meshes_t* get_mesh();
+	Meshes_t* get_meshes();
 	const AABB& get_aabb();
 	inline bool is_meshed() { return _is_meshed; }
 	inline void set_mesh_flag(bool is_meshed) { _is_meshed = is_meshed; }

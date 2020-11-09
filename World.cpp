@@ -122,7 +122,7 @@ void World::render(Camera* camera)
 		if(out)
 		{
 			for(auto& chunk: iter->second.get_chunks()) 
-				chunk.get_mesh()->clear_gpu_data();
+				chunk.get_meshes()->clear_gpu_data();
 			iter = map.erase(iter);
 			continue;
 		}
@@ -131,7 +131,7 @@ void World::render(Camera* camera)
 			if(!camera->get_view_frustum()->isBoxInFrustum(chunk.get_aabb()))
 				continue;
 			chunk.add_data_to_GPU();
-			auto* meshes = chunk.get_mesh();
+			auto* meshes = chunk.get_meshes();
 			if (meshes->solid_model.get_render_info()->indices_count != 0) 
 				_chunk_renderer->add_model(&meshes->solid_model);
 //			if (meshes->water_model.get_render_info()->indices_count != 0)

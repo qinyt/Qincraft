@@ -19,20 +19,18 @@ ViewFrustum* Camera::get_view_frustum()
 	return &_frustum;
 }
 
-
 void Camera::update() 
 {
 	auto p_pos = _p_entity->get_position();
 	auto dir = ((Player*)_p_entity)->get_forward_dir();
 	*dir += *p_pos;
 	auto up = ((Player*)_p_entity)->get_up_dir();
-
 	_model_view_mat = std::move(glm::lookAt(*p_pos, *dir, *up));
 	_sky_view_mat = _model_view_mat;
 	_sky_view_mat[3][0] = 0.0f;
 	_sky_view_mat[3][1] = 0.0f;
 	_sky_view_mat[3][2] = 0.0f;
-
-	_frustum.update(_proj_mat * _model_view_mat);
+	_proj_view_mat = _proj_mat * _model_view_mat;
+	_frustum.update(_proj_view_mat);
 }
 

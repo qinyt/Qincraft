@@ -3,19 +3,19 @@
 #include"Texture.h"
 #include"Model.h"
 #include"Camera.h"
-#include"ChunkShader.h"
+#include"WaterShader.h"
 #include"Chunk.h"
 #include<vector>
-class ChunkRenderer 
+
+class WaterRenderer 
 {
 public:
-	ChunkRenderer() = delete;
-	ChunkRenderer(Camera* camera);
-	~ChunkRenderer();
+	WaterRenderer();
+	~WaterRenderer();
 	void add_model(Model* model);
 	void render(Camera* camera);
 private:
-	Texture _tex;
-	ChunkShader  _shader;
+	WaterShader _shader;
+	//Texture _tex; use texture from chunk renderer
 	std::vector<RenderInfo_t*> _models;
 };

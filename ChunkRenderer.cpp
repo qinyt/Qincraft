@@ -7,9 +7,7 @@
 
 ChunkRenderer::ChunkRenderer(Camera* camera) :
 	_tex("./Textures/DefaultPack2.png")
-{
-	_shader.set_project_mat(camera->get_proj_mat());
-}
+{}
 
 ChunkRenderer::~ChunkRenderer() 
 {
@@ -29,7 +27,7 @@ void ChunkRenderer::render(Camera* camera)
 	if (_models.empty()) return;
 
 	_shader.bind();
-	_shader.set_model_view_mat(*camera->get_model_view_mat());
+	_shader.set_project_view_mat(*camera->get_proj_view_mat());
 	_tex.bind();
 	glEnable(GL_CULL_FACE);
 		
