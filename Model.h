@@ -4,6 +4,11 @@
 #include"glad\glad.h"
 #include<vector>
 
+#define VERTEX_SLOT		0
+#define TEX_COORD_SLOT	1
+
+class Model;
+
 typedef struct Vertex 
 {
 	GLfloat	position[3];
@@ -25,9 +30,6 @@ typedef struct RenderInfo
 	void reset() { vao = 0; indices_count = 0; }
 }RenderInfo_t;
 
-#define VERTEX_SLOT		0
-#define TEX_COORD_SLOT	1
-
 class Model 
 {
 public:
@@ -47,5 +49,22 @@ private:
 	RenderInfo_t _render_info;
 	GLuint _vbo;
 	GLuint _ebo;
-
 };
+
+typedef struct Meshes
+{
+	Mesh_t	solid;
+	Model	solid_model;
+	Mesh_t	water;
+	Model	water_model;
+	void add_to_model()
+	{
+		solid_model.add_data(&solid);
+		water_model.add_data(&water);
+	}
+	void clear_gpu_data()
+	{
+		solid_model.clear_data();
+		water_model.clear_data();
+	}
+}Meshes_t;

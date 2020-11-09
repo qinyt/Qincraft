@@ -33,16 +33,21 @@ const AABB& Chunk::get_aabb()
 	return _aabb;
 }
 
-void Chunk::clear_mesh() 
+Mesh_t* Chunk::get_mesh(BlockType block) 
 {
-	_mesh.indices.clear();
-	_mesh.vertices.clear();
+	if (block == BlockType::WATER)
+		return &_meshes.water;
+	return &_meshes.solid;
 }
 
-Mesh_t* Chunk::get_mesh() 
+void Chunk::clear_mesh() 
 {
-	return &_mesh;
+	_meshes.solid.indices.clear();
+	_meshes.solid.vertices.clear();
+	_meshes.water.indices.clear();
+	_meshes.water.vertices.clear();
 }
+
 
 BlockType Chunk::get_block_type_within_chunk(int x, int y, int z) const
 {
@@ -53,10 +58,10 @@ BlockType Chunk::get_block_type_within_chunk(int x, int y, int z) const
 
 void Chunk::add_data_to_GPU() 
 {
-	_model.add_data(&_mesh);
+	_meshes.add_to_model();
 }
 
-Model* Chunk::get_model() 
+Meshes_t* Chunk::get_mesh() 
 {
-	return &_model;
+	return &_meshes;
 }

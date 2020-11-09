@@ -56,7 +56,6 @@ void ChunkCylinder::mesh(Camera* camera)
 	{
 		for (int x = _pos.x - 1; x <= _pos.x + 1; ++x) 
 		{
-			//if (!World::is_chunk_cylinder_exist(x, z))
 			World::load_chunk(x, z);
 		}
 	}

@@ -12,7 +12,7 @@ public:
 	ChunkRenderer() = delete;
 	ChunkRenderer(Camera* camera);
 	~ChunkRenderer();
-	void add_chunk(Chunk* chunk);
+	void add_model(Model* model);
 	void render(Camera* camera);
 private:
 	Texture _tex;

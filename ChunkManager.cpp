@@ -183,7 +183,7 @@ void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)
 		
 		//chunk.clear_mesh();
 		_current_indice = 0;
-		_mesh = chunk.get_mesh();
+		_mesh = &chunk.get_mesh()->solid;
 		Block* blocks = chunk.get_block_ptr();
 
 		auto pos = chunk.get_pos();

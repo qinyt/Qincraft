@@ -18,19 +18,20 @@ public:
 	Chunk(int posX,int posY, int posZ);
 	~Chunk();
 	BlockType get_block_type_within_chunk(int x, int y, int z) const;
-	Mesh_t* get_mesh();
 	inline sf::Vector3i& get_pos() { return _world_pos; }
 	inline Block* get_block_ptr()  { return _blocks; }
 	void clear_mesh();
 	void add_data_to_GPU();
-	Model* get_model();
+	Meshes_t* get_mesh();
 	const AABB& get_aabb();
 	inline bool is_meshed() { return _is_meshed; }
 	inline void set_mesh_flag(bool is_meshed) { _is_meshed = is_meshed; }
+	Mesh_t* get_mesh(BlockType block);
 private:
 	sf::Vector3i _world_pos;
-	Mesh_t _mesh;
-	Model _model;
+	//Mesh_t _mesh;
+	Meshes _meshes;
+	// _model;
 	Block _blocks[CHUNK_VOLUME];
 	bool _is_meshed;
 	AABB _aabb;
