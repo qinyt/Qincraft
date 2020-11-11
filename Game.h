@@ -1,5 +1,5 @@
 #pragma once
-//#include"SimpleRenderer.h"
+#include"WaterRenderer.h"
 #include "Player.h"
 #include "Camera.h"
 #include"ChunkRenderer.h"
@@ -18,6 +18,6 @@ private:
 	Camera _camera;
 	World	_world;
 	SkyRenderer		_sky_renderer;
-	//SimpleRenderer	_simpleRenderer;
+	WaterRenderer	_water_renderer;
 	ChunkRenderer   _chunk_renderer;
 };

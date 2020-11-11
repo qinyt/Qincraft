@@ -5,7 +5,7 @@
 Camera::Camera():
 	_p_entity(0), 
 	_model_view_mat(glm::mat4x4(1.0f)),
-	_proj_mat(glm::perspective(glm::radians(60.0f), 1.5f, 0.1f, 1000.0f))
+	_proj_mat(glm::perspective(glm::radians(30.0f), 1.5f, 0.1f, 1000.0f))
 {
 }
 

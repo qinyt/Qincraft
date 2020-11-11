@@ -59,8 +59,10 @@ typedef struct Meshes
 	Model	water_model;
 	void add_to_model()
 	{
-		solid_model.add_data(&solid);
-		water_model.add_data(&water);
+		if(solid.vertices.empty() == false)
+			solid_model.add_data(&solid);
+		if (water.vertices.empty() == false)
+			water_model.add_data(&water);
 	}
 	void clear_gpu_data()
 	{

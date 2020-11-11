@@ -8,17 +8,10 @@
 
 std::unordered_map<math::VectorXZ_t, ChunkCylinder> World::map;
 
-#if 1
 #define LOCK _chunk_mtx.lock();
-
 #define UNLOCK _chunk_mtx.unlock();
-#else
-#define LOCK 
-#define UNLOCK 
-#endif
 
 #define RENDER_LIMITE 6
-
 
 World::World(Camera* camera) :
 	_render_distance(2),
