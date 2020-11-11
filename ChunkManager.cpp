@@ -6,7 +6,7 @@
 #include"Random.h"
 #include"GeneralMaths.h"
 
-#define  WATER_LEVEL 64;
+#define  WATER_LEVEL 64
 
 #define ADD_INDICE GLuint index[6]; \
 index[0] = _current_indice + 0; \
@@ -68,6 +68,7 @@ void ChunkManager::build_block()
 	int x, y, z;
 	int topY  = _cur_chunk_cylinder->get_max_height();
 	auto pos = _cur_chunk_cylinder->get_pos();
+	topY = topY > WATER_LEVEL ? topY : WATER_LEVEL;
 	for (y = 0; y < topY + 1; ++y) 
 	{
 		Chunk* chunk = _cur_chunk_cylinder->get_chunk(y);
@@ -78,8 +79,13 @@ void ChunkManager::build_block()
 			int deltaY = y % CHUNK_WIDTH_SIZE;
 			int idx = deltaY * CHUNK_LAYER_SIZE + z * CHUNK_WIDTH_SIZE + x;
 			int height = current_height_map[x + CHUNK_WIDTH_SIZE * z];
-			if (y > height) 
+			if (y <= WATER_LEVEL) 
 			{
+				blocks[idx] = BlockType::WATER;
+				continue;
+			}
+			if (y > height)
+			{				
 				blocks[idx] = BlockType::AIR;
 			}
 			else if(y == height)
@@ -87,7 +93,7 @@ void ChunkManager::build_block()
 				auto t = getBiome(x, z).getTopBlock(r);
 				blocks[idx] = getBiome(x, z).getTopBlock(r);
 			}
-			else if(y > (height - 3))
+			else if(y > (height - 5))
 			{
 				blocks[idx] = BlockType::MUD;
 			}

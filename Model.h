@@ -59,9 +59,9 @@ typedef struct Meshes
 	Model	water_model;
 	void add_to_model()
 	{
-		if(solid.vertices.empty() == false)
+		if(solid.vertices.empty() == false) //NOTICE: Exclude empty vertices gains ENORMOUS speed
 			solid_model.add_data(&solid);
-		if (water.vertices.empty() == false)
+		if (water.vertices.empty() == false) //NOTICE: Exclude empty vertices gains ENORMOUS speed
 			water_model.add_data(&water);
 	}
 	void clear_gpu_data()
