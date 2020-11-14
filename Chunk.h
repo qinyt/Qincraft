@@ -14,7 +14,7 @@
 class Chunk 
 {
 public:
-	Chunk();
+	Chunk() = delete;
 	Chunk(int posX,int posY, int posZ);
 	~Chunk();
 	BlockType get_block_type_within_chunk(int x, int y, int z) const;

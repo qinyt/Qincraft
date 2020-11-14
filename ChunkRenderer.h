@@ -9,8 +9,7 @@
 class ChunkRenderer 
 {
 public:
-	ChunkRenderer() = delete;
-	ChunkRenderer(Camera* camera);
+	ChunkRenderer();
 	~ChunkRenderer();
 	void add_model(Model* model);
 	void render(Camera* camera);

@@ -4,6 +4,7 @@
 #include"Model.h"
 #include"Camera.h"
 #include"WaterShader.h"
+#include"ChunkShader.h"
 #include"Chunk.h"
 #include<vector>
 
@@ -16,6 +17,7 @@ public:
 	void render(Camera* camera);
 private:
 	WaterShader _shader;
+	//ChunkShader _shader;
 	//Texture _tex; use texture from chunk renderer
 	std::vector<RenderInfo_t*> _models;
 };

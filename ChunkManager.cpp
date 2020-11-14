@@ -6,7 +6,7 @@
 #include"Random.h"
 #include"GeneralMaths.h"
 
-#define  WATER_LEVEL 64
+
 
 #define ADD_INDICE GLuint index[6]; \
 index[0] = _current_indice + 0; \
@@ -175,7 +175,7 @@ void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)
 	{
 		if (!camera->get_view_frustum()->isBoxInFrustum(chunk.get_aabb())) 
 		{
-			chunk.set_mesh_flag(false);
+			//chunk.set_mesh_flag(false);
 			continue;
 		}
 
@@ -207,6 +207,8 @@ void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)
 			{
 				for (_posX = lx; _posX < lx + CHUNK_WIDTH_SIZE; ++_posX)
 				{
+					/*if (_posX == 16522 && _posY == 65 && _posZ == 16216)
+						__debugbreak();*/
 					int ix = _posX - lx;
 					int iz = _posZ - lz;
 					int iy = _posY - base;
@@ -366,8 +368,6 @@ const Biome& ChunkManager::getBiome(int x, int z) const
 {
 	int biomeValue = current_biome_map[x + CHUNK_WIDTH_SIZE * z];
 	
-	//return m_grassBiome;
-
 	if (biomeValue > 160) {
 		return m_oceanBiome;
 	}

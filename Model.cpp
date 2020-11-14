@@ -1,8 +1,7 @@
 #include"Model.h"
 
 Model::Model():
-    _render_info({0,0}),
-    _vbo(0)
+    _render_info({0,0})
 {
 }
 
@@ -13,7 +12,7 @@ Model::~Model()
 
 void Model::add_data(Mesh_t* mesh) 
 {
-    if (_render_info.vao) clear_data();
+    if (_render_info.vao != 0 ) clear_data();
     gen_vao();
     gen_vbo(mesh);
     gen_ebo(mesh);
@@ -21,12 +20,14 @@ void Model::add_data(Mesh_t* mesh)
 
 void Model::gen_ebo(Mesh_t* mesh) 
 {
+    GLuint ebo;
     _render_info.indices_count = static_cast<GLuint>(mesh->indices.size());
-    glGenBuffers(1, &_ebo);
+    glGenBuffers(1, &ebo);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, _render_info.indices_count * sizeof(GLuint),
         mesh->indices.data(), GL_STATIC_DRAW);
+    _buffers.push_back(ebo);
 }
 
 void Model::bind()
@@ -37,15 +38,14 @@ void Model::bind()
 void Model::gen_vao() 
 {
     glGenVertexArrays(1, &_render_info.vao);
-    //printf("vao gen num:%d \n", (int)_render_info.vao);
     glBindVertexArray(_render_info.vao);
 }
 
 void Model::gen_vbo(Mesh_t* mesh)
 {
-    glGenBuffers(1, &_vbo);
-    //printf("vbo num:%d \n", (int)_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, mesh->vertices.size() * sizeof(Vertex_t), mesh->vertices.data(),
         GL_STATIC_DRAW);
 
@@ -54,21 +54,16 @@ void Model::gen_vbo(Mesh_t* mesh)
 
     glVertexAttribPointer(TEX_COORD_SLOT, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex_t), (GLvoid*)(3*sizeof(GLfloat)));
     glEnableVertexAttribArray(TEX_COORD_SLOT);
+    _buffers.push_back(vbo);
 }
 
 void Model::clear_data() 
 {
     if (_render_info.vao)
         glDeleteVertexArrays(1, &_render_info.vao);
-    if (_vbo) 
+    if (_buffers.size() > 0) 
     {
-        glDeleteBuffers(1, &_vbo);
-    }
-    if (_ebo)
-    {
-        glDeleteBuffers(1, &_ebo);
+        glDeleteBuffers(static_cast<GLsizei>(_buffers.size()), _buffers.data());
     }
     _render_info.reset();
-    _vbo = 0;
-    _ebo = 0;
 }

@@ -91,6 +91,10 @@ void World::set_chunk_renderer(ChunkRenderer* renderer)
 {
 	_chunk_renderer = renderer;
 }
+void World::set_water_renderer(WaterRenderer* renderer) 
+{
+	_water_renderer = renderer;
+}
 
 
 void World::update() 
@@ -127,8 +131,8 @@ void World::render(Camera* camera)
 			auto* meshes = chunk.get_meshes();
 			if (meshes->solid_model.get_render_info()->indices_count != 0) 
 				_chunk_renderer->add_model(&meshes->solid_model);
-//			if (meshes->water_model.get_render_info()->indices_count != 0)
-//				_water_renderer->add_model(&meshes->solid_model);
+			if (meshes->water_model.get_render_info()->indices_count != 0)
+				_water_renderer->add_model(&meshes->water_model);
 		}
 		++iter;
 	}

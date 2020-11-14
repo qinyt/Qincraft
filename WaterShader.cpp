@@ -24,6 +24,6 @@ void WaterShader::set_project_view_mat(glm::mat4& mat)
 void WaterShader::getUniforms() 
 {
     bind();
-    _location_proj_view = glGetUniformLocation(m_id, "projViewMatrix;");
-    _time = glGetUniformLocation(m_id, "globalTime;");
+    _location_proj_view = glGetUniformLocation(m_id, "projViewMatrix");
+    _time = glGetUniformLocation(m_id, "globalTime");
 }

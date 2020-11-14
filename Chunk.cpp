@@ -6,11 +6,11 @@
 #include"Chunk.h"
 
 
-Chunk::Chunk() :
-	_world_pos{ 0, 0, 0 },
-	_is_meshed(false),
-	_aabb({ CHUNK_WIDTH_SIZE,CHUNK_WIDTH_SIZE,CHUNK_WIDTH_SIZE })
-{}
+//Chunk::Chunk() :
+//	_world_pos{ 0, 0, 0 },
+//	_is_meshed(false),
+//	_aabb({ CHUNK_WIDTH_SIZE,CHUNK_WIDTH_SIZE,CHUNK_WIDTH_SIZE })
+//{}
 
 Chunk::Chunk(int posX, int posY, int posZ) :
 	_world_pos{ posX, posY, posZ}, 

@@ -8,6 +8,9 @@ bool App::is_running = true;
 #if SHOW_TRI_COUNT
 int App::tri_count = 0;
 #endif
+
+float App::time_sec_elapsed = 0;
+
 App::App()
 {
     
@@ -63,6 +66,8 @@ void App::poll_event()
 static GLuint frames = 0;
 void App::loop() 
 {    
+    sf::Time time;
+    sf::Clock dt;
     while (is_running) 
     {
         if (_timer.time_passed_milli() > 1000.0) 
@@ -74,6 +79,7 @@ void App::loop()
             printf("fps: %d\n", frames);
 #endif
             frames = 0;
+            
         }
         ++frames;
         poll_event();
@@ -85,7 +91,11 @@ void App::loop()
         }
         _game->update();
         _game->render();
-                      
+        
+        time = dt.restart();
+        time_sec_elapsed += time.asSeconds();
+
         window.display();
+
     }
 }

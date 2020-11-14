@@ -5,16 +5,12 @@
 #include"World.h"
 #include"Application.h"
 
-ChunkRenderer::ChunkRenderer(Camera* camera) :
+ChunkRenderer::ChunkRenderer() :
 	_tex("./Textures/DefaultPack2.png")
 {}
 
 ChunkRenderer::~ChunkRenderer() 
 {
-	for (auto model : _models) 
-	{
-		delete model;
-	}
 }
 
 void ChunkRenderer::add_model(Model* model)
