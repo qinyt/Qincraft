@@ -11,10 +11,6 @@ ChunkRenderer::ChunkRenderer(Camera* camera) :
 
 ChunkRenderer::~ChunkRenderer() 
 {
-	for (auto model : _models) 
-	{
-		delete model;
-	}
 }
 
 void ChunkRenderer::add_model(Model* model)
