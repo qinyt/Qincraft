@@ -35,8 +35,8 @@ const AABB& Chunk::get_aabb()
 
 Mesh_t* Chunk::get_mesh(BlockType block) 
 {
-	/*if (block == BlockType::WATER)
-		return &_meshes.water;*/
+	if (block == BlockType::WATER)
+		return &_meshes.water;
 	return &_meshes.solid;
 }
 
@@ -51,7 +51,6 @@ void Chunk::clear_mesh()
 
 BlockType Chunk::get_block_type_within_chunk(int x, int y, int z) const
 {
-	//already filtered the out of bound situation in cylinder level !!!
 	GLuint idx = x + z * CHUNK_WIDTH_SIZE + y * CHUNK_LAYER_SIZE;
 	return _blocks[idx].get_type();
 }

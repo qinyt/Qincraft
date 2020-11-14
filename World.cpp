@@ -44,8 +44,8 @@ World::World(Camera* camera) :
 				chunk_cylinder.mesh(cam);
 			}
 		}
-		UNLOCK;
 		if (++_render_distance == RENDER_LIMITE) _render_distance = 2;
+		UNLOCK;
 	}
 })
 {}
@@ -104,6 +104,19 @@ void World::update()
 
 void World::render(Camera* camera)
 {
+	//if (App::keyboard.is_key_down(sf::Keyboard::Key::RAlt))
+	//{
+	//	for (auto iter = map.begin(); iter != map.end();)
+	//	{
+	//		for (auto& chunk : iter->second.get_chunks()) 
+	//		{
+	//			printf("searching\n");
+	//			if(chunk.get_meshes()->solid.indices.size() != 0)
+	//			__debugbreak();
+	//		}
+	//	}
+	//}
+
 	int posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
 	int posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
 	LOCK;

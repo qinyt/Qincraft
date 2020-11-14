@@ -9,7 +9,7 @@ WaterRenderer::~WaterRenderer()
 
 void WaterRenderer::add_model(Model* model) 
 {
-	_models.emplace_back(model->get_render_info());
+	_models.push_back(model->get_render_info());
 	//printf("water model size: %d\n", _models.size());
 }
 

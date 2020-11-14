@@ -65,5 +65,6 @@ void Model::clear_data()
     {
         glDeleteBuffers(static_cast<GLsizei>(_buffers.size()), _buffers.data());
     }
+    _buffers.clear();
     _render_info.reset();
 }

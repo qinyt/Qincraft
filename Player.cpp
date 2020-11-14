@@ -101,6 +101,7 @@ void Player::handle_input()
 	if (App::keyboard.is_key_down(sf::Keyboard::Key::Enter))
 	{
 		printf("position:%f, %f, %f\n",_position.x, _position.y, _position.z);
+		printf("chunk position:%f, %f, %f\n", _position.x/16, _position.y/16, _position.z/16);
 		__debugbreak();
 	}
 #endif
