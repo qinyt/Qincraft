@@ -35,8 +35,8 @@ const AABB& Chunk::get_aabb()
 
 Mesh_t* Chunk::get_mesh(BlockType block) 
 {
-	/*if (block == BlockType::WATER)
-		return &_meshes.water;*/
+	if (block == BlockType::WATER)
+		return &_meshes.water;
 	return &_meshes.solid;
 }
 

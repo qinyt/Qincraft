@@ -47,8 +47,7 @@ private:
 	void gen_ebo(Mesh_t* mesh);
 
 	RenderInfo_t _render_info;
-	GLuint _vbo;
-	GLuint _ebo;
+	std::vector<GLuint> _buffers;
 };
 
 typedef struct Meshes

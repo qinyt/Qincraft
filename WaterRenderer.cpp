@@ -4,10 +4,6 @@ WaterRenderer::WaterRenderer() {}
 
 WaterRenderer::~WaterRenderer() 
 {
-	for (auto model : _models)
-	{
-		delete model;
-	}
 }
 
 void WaterRenderer::add_model(Model* model) 
