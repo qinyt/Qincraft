@@ -6,17 +6,17 @@
 #include"Random.h"
 #include"GeneralMaths.h"
 
-#define  WATER_LEVEL 64
+
 
 #define ADD_INDICE GLuint index[6]; \
-index[0] = _current_indice + 0; \
-index[1] = _current_indice + 1; \
-index[2] = _current_indice + 3; \
-index[3] = _current_indice + 1; \
-index[4] = _current_indice + 2; \
-index[5] = _current_indice + 3; \
+index[0] = *_current_index + 0; \
+index[1] = *_current_index + 1; \
+index[2] = *_current_index + 3; \
+index[3] = *_current_index + 1; \
+index[4] = *_current_index + 2; \
+index[5] = *_current_index + 3; \
 for (int i = 0; i < 6; ++i) _mesh->add_index(index[i]); \
-_current_indice += 4
+*_current_index += 4
 
 const int seed = RandomSingleton::get().intInRange(424, 325322);
 
@@ -33,6 +33,9 @@ ChunkManager::ChunkManager()
 	, m_oceanBiome(seed)
 	, m_lightForest(seed)
 	, noiser(seed)
+	,_current_index(0)
+	,_solid_index(0)
+	,_water_index(0)
 {
 	_tex_step = Block::block_manager.get_tex_coord_step();
 	setup_noise();
@@ -151,11 +154,11 @@ void ChunkManager::build_height_map()
 			{
 				if (x == CHUNK_WIDTH_SIZE) continue;
 				if (z == CHUNK_WIDTH_SIZE) continue;
-				current_height_map[x + CHUNK_WIDTH_SIZE * z] = smoothInterpolation(
+				current_height_map[x + CHUNK_WIDTH_SIZE * z] = static_cast<int> (smoothInterpolation(
 					h0, h1, h2, h3,
 					static_cast<float>(ix), static_cast<float>(width),
 					static_cast<float>(iz), static_cast<float>(height),
-					static_cast<float>(x), static_cast<float>(z));
+					static_cast<float>(x), static_cast<float>(z)));
 			}
 		}
 	};
@@ -167,21 +170,20 @@ void ChunkManager::build_height_map()
 	build(half,		half,		CHUNK_WIDTH_SIZE,	CHUNK_WIDTH_SIZE);
 }
 
-void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)
+void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)	
 {
 	_cur_chunk_cylinder = cy;
 	int max_h = _cur_chunk_cylinder->get_max_height();
 	for (auto& chunk : _cur_chunk_cylinder->get_chunks())
 	{
+		if (chunk.is_meshed() == true) continue;
 		if (!camera->get_view_frustum()->isBoxInFrustum(chunk.get_aabb())) 
 		{
-			chunk.set_mesh_flag(false);
+			//chunk.set_mesh_flag(false);
 			continue;
 		}
-
-		if (chunk.is_meshed() == true) continue;
-		
-		_current_indice = 0;
+		_solid_index = 0;
+		_water_index = 0;
 		Block* blocks = chunk.get_block_ptr();
 
 		auto pos = chunk.get_pos();
@@ -200,18 +202,27 @@ void ChunkManager::build_mesh(ChunkCylinder* cy, Camera* camera)
 		int lz = pos.z * CHUNK_WIDTH_SIZE;
 		int lx = pos.x * CHUNK_WIDTH_SIZE;
 
-		//auto* meshes = chunk.get_meshes();
 		for (_posY = base; _posY <= base + delta; ++_posY)
 		{
 			for (_posZ = lz; _posZ < lz + CHUNK_WIDTH_SIZE; ++_posZ)
 			{
 				for (_posX = lx; _posX < lx + CHUNK_WIDTH_SIZE; ++_posX)
 				{
+					/*if (_posX == 16522 && _posY == 65 && _posZ == 16216)
+						__debugbreak();*/
 					int ix = _posX - lx;
 					int iz = _posZ - lz;
 					int iy = _posY - base;
 					auto block_type = blocks[iy * CHUNK_LAYER_SIZE + iz * CHUNK_WIDTH_SIZE + ix].get_type();
 					if (block_type == BlockType::AIR) continue;
+					if (block_type == BlockType::WATER) 
+					{
+						_current_index = &_water_index;
+					}
+					else 
+					{
+						_current_index = &_solid_index;
+					}
 					_mesh = chunk.get_mesh(block_type);
 					_coord = Block::block_manager.get_tex_coord(block_type);
 					try_build_front_face();
@@ -244,7 +255,7 @@ void ChunkManager::try_build_front_face()
 	verts[1] = { x + 1.f,	y + 1.f,		z,		u + _tex_step->u,	0.0f };
 	verts[0] = { x,			y + 1.f,		z,		u,					0.0f };
 	for (int i = 0; i < 4; ++i)  _mesh->add_vert(verts[i]);
-
+	
 	ADD_INDICE;
 }
 
@@ -366,8 +377,6 @@ const Biome& ChunkManager::getBiome(int x, int z) const
 {
 	int biomeValue = current_biome_map[x + CHUNK_WIDTH_SIZE * z];
 	
-	//return m_grassBiome;
-
 	if (biomeValue > 160) {
 		return m_oceanBiome;
 	}

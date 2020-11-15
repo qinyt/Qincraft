@@ -12,7 +12,7 @@ Model::~Model()
 
 void Model::add_data(Mesh_t* mesh) 
 {
-    if (_render_info.vao) clear_data();
+    if (_render_info.vao != 0 ) clear_data();
     gen_vao();
     gen_vbo(mesh);
     gen_ebo(mesh);
@@ -38,7 +38,6 @@ void Model::bind()
 void Model::gen_vao() 
 {
     glGenVertexArrays(1, &_render_info.vao);
-    //printf("vao gen num:%d \n", (int)_render_info.vao);
     glBindVertexArray(_render_info.vao);
 }
 
@@ -46,7 +45,7 @@ void Model::gen_vbo(Mesh_t* mesh)
 {
     GLuint vbo;
     glGenBuffers(1, &vbo);
-    //printf("vbo num:%d \n", (int)_vbo);
+
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, mesh->vertices.size() * sizeof(Vertex_t), mesh->vertices.data(),
         GL_STATIC_DRAW);
@@ -63,9 +62,10 @@ void Model::clear_data()
 {
     if (_render_info.vao)
         glDeleteVertexArrays(1, &_render_info.vao);
-    if (_buffers.size() != 0) 
+
+    if (_buffers.size() > 0) 
     {
-        glDeleteBuffers(_buffers.size(), _buffers.data());
+        glDeleteBuffers(static_cast<GLsizei>(_buffers.size()), _buffers.data());
     }
     _buffers.clear();
     _render_info.reset();

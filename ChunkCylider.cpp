@@ -64,6 +64,7 @@ void ChunkCylinder::mesh(Camera* camera)
 
 BlockType ChunkCylinder::get_block_within(int x, int y, int z)
 {
+	if (y <= WATER_LEVEL) return BlockType::WATER;
 	if (y > _max_height) return BlockType::AIR;
 	int chunkY = static_cast<int>(y / CHUNK_WIDTH_SIZE);
 	for (auto& chunk : _chunks) 

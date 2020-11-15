@@ -47,20 +47,21 @@ private:
 	void gen_ebo(Mesh_t* mesh);
 
 	RenderInfo_t _render_info;
+
 	std::vector<GLuint> _buffers;
 };
 
 typedef struct Meshes
 {
 	Mesh_t	solid;
-	Model	solid_model;
 	Mesh_t	water;
+	Model	solid_model;
 	Model	water_model;
 	void add_to_model()
 	{
 		if(solid.vertices.empty() == false) //NOTICE: Exclude empty vertices gains ENORMOUS speed
 			solid_model.add_data(&solid);
-		if (water.vertices.empty() == false) //NOTICE: Exclude empty vertices gains ENORMOUS speed
+		if (water.vertices.empty() == false) //notice: exclude empty vertices gains enormous speed
 			water_model.add_data(&water);
 	}
 	void clear_gpu_data()

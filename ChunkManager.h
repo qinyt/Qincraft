@@ -48,7 +48,9 @@ private:
 	const Biome& getBiome(int x, int z) const;
 	GLint	_posX, _posY, _posZ;
 	ChunkCylinder* _cur_chunk_cylinder;
-	GLuint	_current_indice;
+	GLuint*	_current_index;
+	GLuint	_solid_index;
+	GLuint	_water_index;
 	Mesh_t* _mesh;
 	TexCoord_t* _coord;
 	TexCoordStep_t* _tex_step;

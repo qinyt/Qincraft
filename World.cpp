@@ -44,8 +44,8 @@ World::World(Camera* camera) :
 				chunk_cylinder.mesh(cam);
 			}
 		}
-		UNLOCK;
 		if (++_render_distance == RENDER_LIMITE) _render_distance = 2;
+		UNLOCK;
 	}
 })
 {}
@@ -91,6 +91,10 @@ void World::set_chunk_renderer(ChunkRenderer* renderer)
 {
 	_chunk_renderer = renderer;
 }
+void World::set_water_renderer(WaterRenderer* renderer) 
+{
+	_water_renderer = renderer;
+}
 
 
 void World::update() 
@@ -100,6 +104,19 @@ void World::update()
 
 void World::render(Camera* camera)
 {
+	//if (App::keyboard.is_key_down(sf::Keyboard::Key::RAlt))
+	//{
+	//	for (auto iter = map.begin(); iter != map.end();)
+	//	{
+	//		for (auto& chunk : iter->second.get_chunks()) 
+	//		{
+	//			printf("searching\n");
+	//			if(chunk.get_meshes()->solid.indices.size() != 0)
+	//			__debugbreak();
+	//		}
+	//	}
+	//}
+
 	int posX = (Game::player.get_position()->x) / CHUNK_WIDTH_SIZE;
 	int posZ = (Game::player.get_position()->z) / CHUNK_WIDTH_SIZE;
 	LOCK;
@@ -127,8 +144,8 @@ void World::render(Camera* camera)
 			auto* meshes = chunk.get_meshes();
 			if (meshes->solid_model.get_render_info()->indices_count != 0) 
 				_chunk_renderer->add_model(&meshes->solid_model);
-//			if (meshes->water_model.get_render_info()->indices_count != 0)
-//				_water_renderer->add_model(&meshes->solid_model);
+			if (meshes->water_model.get_render_info()->indices_count != 0)
+				_water_renderer->add_model(&meshes->water_model);
 		}
 		++iter;
 	}

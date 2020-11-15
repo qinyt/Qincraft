@@ -4,7 +4,7 @@
 #include"print_util.h"
 #include"World.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 #define DEGREE_TO_RADIAN  3.1415926f/180.0f
 
@@ -13,7 +13,7 @@ Player::Player():
 	_head(0.0f * DEGREE_TO_RADIAN),
 	_pitch(80.0f)
 {
-	_position = glm::vec3(PLAYER_SPAWN_X(0), PLAYER_SPAWN_Y(100), PLAYER_SPAWN_Z(0));
+	_position = glm::vec3(16530, 73, 16055);
 	_dir_forward = glm::vec3(0.0f, 0.0f, -1.0f);
 	_acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
 }
@@ -101,6 +101,7 @@ void Player::handle_input()
 	if (App::keyboard.is_key_down(sf::Keyboard::Key::Enter))
 	{
 		printf("position:%f, %f, %f\n",_position.x, _position.y, _position.z);
+		printf("chunk position:%f, %f, %f\n", _position.x/16, _position.y/16, _position.z/16);
 		__debugbreak();
 	}
 #endif

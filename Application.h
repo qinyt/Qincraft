@@ -25,6 +25,7 @@ private:
 	Game* _game;
 	Timer _timer;
 public:
+	static float time_sec_elapsed;
 	static Keyboard keyboard;
 	static sf::Window window;
 	static bool is_running;

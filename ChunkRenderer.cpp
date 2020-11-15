@@ -5,7 +5,7 @@
 #include"World.h"
 #include"Application.h"
 
-ChunkRenderer::ChunkRenderer(Camera* camera) :
+ChunkRenderer::ChunkRenderer() :
 	_tex("./Textures/DefaultPack2.png")
 {}
 
